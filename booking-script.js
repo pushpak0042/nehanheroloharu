@@ -44,10 +44,11 @@ function getField(selector, fallbackSelector) {
 function initializeBookingPage() {
     const urlParams = new URLSearchParams(window.location.search);
 
-    bookingData.productName = urlParams.get('product') || urlParams.get('bike') || 'Vehicle Advance Booking';
+    bookingData.serviceType = urlParams.get('type') || 'vehicle';
+    bookingData.productName = urlParams.get('product') || urlParams.get('bike') ||
+        (bookingData.serviceType === 'service' ? 'Vehicle Service Booking' : 'Vehicle Advance Booking');
     bookingData.variant = urlParams.get('variant') || '';
     bookingData.color = urlParams.get('color') || '';
-    bookingData.serviceType = urlParams.get('type') || 'vehicle';
     bookingData.basePrice = 0;
     bookingData.vehiclePrice = parseAmount(urlParams.get('vehiclePrice'), 0);
     bookingData.handlingFee = 0;
@@ -57,6 +58,8 @@ function initializeBookingPage() {
     const user = auth.getCurrentUser();
     prefillUserDetails(user);
     renderBookingSummary();
+    setupBookingSlots();
+    setupPaymentMethods();
     setupConfirmButton();
 }
 
@@ -73,6 +76,10 @@ function prefillUserDetails(user) {
 function renderBookingSummary() {
     setText('bikeName', bookingData.productName);
     setText('bikeVariant', bookingData.variant || 'Standard');
+    setText('bookingType', bookingData.serviceType === 'service' ? 'Service' : 'Vehicle');
+
+    const variantRow = document.getElementById('variant-row');
+    if (variantRow) variantRow.style.display = bookingData.variant || bookingData.color ? 'flex' : 'none';
 
     const feeRow = document.getElementById('summary-fees-row') ||
         document.querySelector('[data-fee-row]') ||
@@ -82,7 +89,7 @@ function renderBookingSummary() {
 
     const payButton = document.getElementById('pay-button') || document.getElementById('payBtn');
     if (payButton) {
-        payButton.textContent = 'Confirm Booking';
+        payButton.textContent = bookingData.serviceType === 'service' ? 'Confirm Service Booking' : 'Confirm Vehicle Booking';
     }
 }
 
@@ -198,11 +205,22 @@ function setupConfirmButton() {
 
     payButton.addEventListener('click', async () => {
         const clientForm = document.getElementById('client-form');
-        const bookingDate = '';
-        const bookingSlot = '';
+        const bookingDate = document.getElementById('booking-date')?.value || '';
+        const bookingSlot = document.getElementById('booking-slot')?.value || '';
 
         if (clientForm && !clientForm.checkValidity()) {
             clientForm.reportValidity();
+            return;
+        }
+
+        if (!bookingDate) {
+            alert('Please select a preferred booking date.');
+            document.getElementById('booking-date')?.focus();
+            return;
+        }
+
+        if (!bookingSlot) {
+            alert('Please select an available time slot.');
             return;
         }
 
@@ -269,6 +287,9 @@ async function saveBooking(booking) {
 }
 
 function showBookingSuccess(booking) {
+    const bookingDate = booking.bookingDate
+        ? new Date(booking.bookingDate).toLocaleDateString('en-IN')
+        : 'N/A';
     const successHTML = `
         <div class="payment-success-modal">
             <div class="success-content">
@@ -277,7 +298,8 @@ function showBookingSuccess(booking) {
                 <p>Thank you for your ${escapeBookingHtml(booking.service)} booking.</p>
                 <div class="success-details">
                     <p><strong>Booking ID:</strong> ${escapeBookingHtml(booking.id)}</p>
-                    <p><strong>Date:</strong> ${new Date().toLocaleDateString('en-IN')}</p>
+                    <p><strong>Visit Date:</strong> ${escapeBookingHtml(bookingDate)}</p>
+                    <p><strong>Time Slot:</strong> ${escapeBookingHtml(booking.bookingSlot || 'N/A')}</p>
                 </div>
                 <p class="success-message">Your booking details have been saved to your account${window.heroCloud?.getStatus().mode === 'cloud' ? ' and cloud database' : ''}.</p>
                 <div class="success-actions">
