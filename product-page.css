@@ -378,6 +378,13 @@ img {
         border: 1px solid #e4e9f1;
     }
 
+    .sub-nav .btn-book {
+        display: block;
+        width: 100%;
+        border-radius: 8px;
+        text-align: center;
+    }
+
     .product-hero {
         grid-template-columns: 1fr;
         background: linear-gradient(180deg, #ffffff 0%, #f7f9fc 56%, #131821 56%, #0d1118 100%);
