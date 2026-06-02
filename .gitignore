@@ -14,10 +14,3 @@ desktop.ini
 # Large video files (exceed GitHub 100MB limit)
 *.mp4
 
-# Temporarily exclude images (will add in batches)
-*.png
-*.jpg
-*.jpeg
-*.webp
-*.avif
-*.svg
