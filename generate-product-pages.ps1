@@ -271,6 +271,7 @@ function New-VariantHtml($variants, $hero) {
 foreach($p in $pages) {
     $hero = if(Test-Path -Path $p.hero) { $p.hero } else { 'nehan hero logo.png' }
     $variantHtml = New-VariantHtml -variants $p.variants -hero $hero
+    $bookingProduct = [System.Uri]::EscapeDataString($p.name)
 
     $specHtml = ""
     foreach($s in $p.specs) {
@@ -310,7 +311,7 @@ foreach($p in $pages) {
                     <li><a href='index.html#community'>Community</a></li>
                     <li><a href='contact.html'>Contact</a></li>
                 </ul>
-                <a class='btn-book' href='booking.html?product=$($p.name)'>Book Now</a>
+                <a class='btn-book' href='booking.html?product=$bookingProduct'>Book Now</a>
             </nav>
         </div>
     </header>
@@ -328,9 +329,9 @@ foreach($p in $pages) {
                 </div>
 
                 <div class='product-actions'>
-                    <a class='btn-book' href='booking.html?product=$($p.name)'>Book This Model</a>
+                    <a class='btn-book' href='booking.html?product=$bookingProduct'>Book This Model</a>
                     <a class='btn-outline' href='index.html#find-ride'>Back to Product Hub</a>
-                    <a class='btn-outline' href='service booking .html?product=$($p.name)'>Book Service</a>
+                    <a class='btn-outline' href='booking.html?type=service&product=$bookingProduct'>Book Service</a>
                 </div>
             </div>
 

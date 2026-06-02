@@ -365,8 +365,9 @@ img {
         gap: 10px;
     }
 
-    .sub-nav.is-open {
-        display: flex;
+    .sub-nav.is-open,
+    .sub-nav[data-open="true"] {
+        display: flex !important;
     }
 
     .sub-nav-links {

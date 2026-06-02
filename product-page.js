@@ -7,37 +7,75 @@ function initSubMenu() {
     var toggle = document.getElementById("subMenuToggle");
     var nav = document.getElementById("subNav");
     var backdrop = document.getElementById("subMenuBackdrop");
+    var lastTouchToggle = 0;
 
     if (!toggle || !nav || !backdrop) {
         return;
+    }
+
+    if (nav.getAttribute("data-menu-ready") === "true") {
+        return;
+    }
+    nav.setAttribute("data-menu-ready", "true");
+
+    function hasClass(element, className) {
+        return element && (" " + element.className + " ").indexOf(" " + className + " ") !== -1;
+    }
+
+    function addClass(element, className) {
+        if (element && !hasClass(element, className)) {
+            element.className = element.className ? element.className + " " + className : className;
+        }
+    }
+
+    function removeClass(element, className) {
+        if (!element) {
+            return;
+        }
+        element.className = (" " + element.className + " ").replace(" " + className + " ", " ").replace(/^\s+|\s+$/g, "");
     }
 
     function isMobile() {
         return window.innerWidth <= 980;
     }
 
-    function closeMenu() {
-        nav.classList.remove("is-open");
-        toggle.setAttribute("aria-expanded", "false");
-        backdrop.hidden = true;
-        document.body.style.overflow = "";
-    }
-
-    function openMenu() {
-        nav.classList.add("is-open");
-        toggle.setAttribute("aria-expanded", "true");
-        backdrop.hidden = false;
-        document.body.style.overflow = "hidden";
-    }
-
-    toggle.addEventListener("click", function () {
-        var shouldOpen = !nav.classList.contains("is-open");
-        if (shouldOpen) {
-            openMenu();
+    function setMenuOpen(isOpen) {
+        if (isOpen) {
+            addClass(nav, "is-open");
+            addClass(toggle, "is-active");
+            nav.setAttribute("data-open", "true");
+            toggle.setAttribute("aria-expanded", "true");
+            backdrop.hidden = false;
+            document.body.style.overflow = "hidden";
         } else {
-            closeMenu();
+            removeClass(nav, "is-open");
+            removeClass(toggle, "is-active");
+            nav.setAttribute("data-open", "false");
+            toggle.setAttribute("aria-expanded", "false");
+            backdrop.hidden = true;
+            document.body.style.overflow = "";
         }
-    });
+    }
+
+    function closeMenu() {
+        setMenuOpen(false);
+    }
+
+    function handleToggle(event) {
+        if (event && event.type === "click" && Date.now() - lastTouchToggle < 450) {
+            return;
+        }
+        if (event && event.type === "touchstart") {
+            lastTouchToggle = Date.now();
+        }
+        if (event && event.preventDefault) event.preventDefault();
+        if (event && event.stopPropagation) event.stopPropagation();
+
+        setMenuOpen(!hasClass(nav, "is-open"));
+    }
+
+    toggle.addEventListener("click", handleToggle);
+    toggle.addEventListener("touchstart", handleToggle, false);
 
     backdrop.addEventListener("click", closeMenu);
 

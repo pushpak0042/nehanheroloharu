@@ -820,8 +820,9 @@ footer[id] {
         overscroll-behavior: contain;
     }
 
-    .main-nav.is-open {
-        display: flex;
+    .main-nav.is-open,
+    .main-nav[data-open="true"] {
+        display: flex !important;
     }
 
     .nav-list {
