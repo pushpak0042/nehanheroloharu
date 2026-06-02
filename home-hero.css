@@ -70,7 +70,7 @@ footer[id] {
 .site-header {
     position: sticky;
     top: 0;
-    z-index: 1000;
+    z-index: 1200;
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(9px);
     border-bottom: 1px solid rgba(0, 0, 0, 0.08);
@@ -311,7 +311,7 @@ footer[id] {
     position: fixed;
     inset: 0;
     background: rgba(11, 14, 18, 0.46);
-    z-index: 1090;
+    z-index: 1100;
 }
 
 .hero-section {
@@ -919,7 +919,15 @@ footer[id] {
     }
 
     .nav-actions {
-        display: none;
+        display: flex;
+        margin-top: auto;
+        padding-top: 8px;
+        border-top: 1px solid #eaedf1;
+    }
+
+    .nav-actions .btn {
+        width: 100%;
+        text-align: center;
     }
 
     .hero-section,
