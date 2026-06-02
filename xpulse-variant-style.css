@@ -1,0 +1,8 @@
+/* Variant selector specific styles */
+.sub-navbar { position: relative; }
+.price-container { text-align: right; }
+.price-container .price-tag { display: block; color: #ed1c24; font-weight: 800; font-size: 1.1rem; }
+.price-container .ex-showroom { display: block; font-size: 0.75rem; color: #666; }
+.price-container .variant-selector { margin-top: 8px; display: inline-block; }
+.price-container .variant-selector label { font-size: 0.75rem; color: #666; display:block; }
+.price-container .variant-selector select { padding: 6px 8px; border-radius: 6px; border: 1px solid #ccc; }

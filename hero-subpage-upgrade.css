@@ -1,0 +1,1091 @@
+/* Shared Hero MotoCorp-style subpage upgrade layer */
+
+:root {
+    --hm-red: #ed1c24;
+    --hm-ink: #111111;
+    --hm-charcoal: #171717;
+    --hm-soft: #f4f5f7;
+    --hm-line: rgba(0, 0, 0, 0.12);
+    --hm-white: #ffffff;
+    --hm-muted: #666666;
+    --hm-shadow: 0 18px 50px rgba(0, 0, 0, 0.12);
+}
+
+body.hm-subpage {
+    background: var(--hm-soft);
+    color: var(--hm-ink);
+    font-family: "Inter", Arial, sans-serif;
+    overflow-x: hidden;
+    padding-top: 74px;
+}
+
+body.hm-subpage a {
+    text-decoration: none;
+}
+
+body.hm-subpage .main-header,
+body.hm-subpage .navbar,
+body.hm-subpage .hm-generated-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 3000;
+    min-height: 74px;
+    background: rgba(255, 255, 255, 0.97);
+    border-bottom: 1px solid #e7e7e7;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    backdrop-filter: blur(14px);
+}
+
+body.hm-subpage .hm-generated-header .nav-container,
+body.hm-subpage .main-header .nav-container,
+body.hm-subpage .navbar .nav-container {
+    max-width: 1420px;
+    min-height: 74px;
+    margin: 0 auto;
+    padding: 0 34px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 26px;
+}
+
+body.hm-subpage .logo,
+body.hm-subpage .hm-generated-header .logo {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+body.hm-subpage .logo img,
+body.hm-subpage .hm-generated-header .logo img {
+    display: block;
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center;
+}
+
+body.hm-subpage .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    list-style: none;
+}
+
+body.hm-subpage .nav-links > li > a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 74px;
+    padding: 0 12px;
+    color: #181818;
+    font-size: 12px;
+    font-weight: 900;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    transition: color 0.2s ease, background 0.2s ease;
+}
+
+body.hm-subpage .nav-links > li > a:hover,
+body.hm-subpage .nav-links > li > a.active-red,
+body.hm-subpage .nav-links > li > a.red-text {
+    color: var(--hm-red);
+}
+
+body.hm-subpage .btn-account,
+body.hm-subpage .hm-nav-cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 40px;
+    padding: 0 18px;
+    border-radius: 6px;
+    background: var(--hm-red);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 900;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+body.hm-subpage .sub-navbar {
+    position: sticky;
+    top: 74px;
+    z-index: 2100;
+    width: 100%;
+    padding: 14px 7%;
+    background: rgba(255, 255, 255, 0.96);
+    color: var(--hm-ink);
+    border-bottom: 1px solid rgba(237, 28, 36, 0.35);
+    box-shadow: 0 12px 26px rgba(0, 0, 0, 0.08);
+    backdrop-filter: blur(14px);
+}
+
+body.hm-subpage .sub-nav-content {
+    max-width: 1320px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 22px;
+}
+
+body.hm-subpage .model-name,
+body.hm-subpage .left-side h2 {
+    color: var(--hm-ink);
+    font-size: 22px;
+    line-height: 1.15;
+    font-weight: 900;
+    text-transform: uppercase;
+}
+
+body.hm-subpage .price-container,
+body.hm-subpage .right-side {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 14px;
+    flex-wrap: wrap;
+}
+
+body.hm-subpage .price-tag,
+body.hm-subpage .left-side .price-tag {
+    color: var(--hm-red);
+    font-size: 18px;
+    font-weight: 900;
+}
+
+body.hm-subpage .ex-showroom {
+    color: var(--hm-muted);
+    font-size: 12px;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+body.hm-subpage .variant-selector {
+    display: grid;
+    gap: 5px;
+}
+
+body.hm-subpage .variant-selector label {
+    color: var(--hm-muted);
+    font-size: 11px;
+    font-weight: 900;
+    text-transform: uppercase;
+}
+
+body.hm-subpage select,
+body.hm-subpage input,
+body.hm-subpage textarea {
+    font: inherit;
+}
+
+body.hm-subpage .variant-selector select,
+body.hm-subpage .input-group select,
+body.hm-subpage .input-group input,
+body.hm-subpage .input-group textarea {
+    min-height: 44px;
+    border: 1px solid #d7d7d7;
+    border-radius: 6px;
+    background: #fff;
+    color: #111;
+    padding: 10px 12px;
+    outline: none;
+}
+
+body.hm-subpage .variant-selector select:focus,
+body.hm-subpage .input-group select:focus,
+body.hm-subpage .input-group input:focus,
+body.hm-subpage .input-group textarea:focus {
+    border-color: var(--hm-red);
+    box-shadow: 0 0 0 3px rgba(237, 28, 36, 0.12);
+}
+
+body.hm-subpage .hero-display,
+body.hm-subpage .hero-section,
+body.hm-subpage .hero,
+body.hm-subpage .booking-hero,
+body.hm-subpage .service-hero,
+body.hm-subpage .hero-explore-page {
+    position: relative;
+    isolation: isolate;
+    min-height: 640px;
+    padding: 78px 7%;
+    overflow: hidden;
+    background:
+        linear-gradient(110deg, #ffffff 0%, #f5f6f8 48%, #101010 48%, #050505 100%);
+}
+
+body.hm-subpage .hero-display::before,
+body.hm-subpage .hero-section::before,
+body.hm-subpage .hero::before,
+body.hm-subpage .booking-hero::before,
+body.hm-subpage .service-hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background:
+        linear-gradient(90deg, transparent 0 64%, rgba(237, 28, 36, 0.18) 64% 65%, transparent 65%),
+        repeating-linear-gradient(90deg, rgba(0, 0, 0, 0.035) 0 1px, transparent 1px 128px);
+    pointer-events: none;
+}
+
+body.hm-subpage .hero-content,
+body.hm-subpage .hero-copy,
+body.hm-subpage .color-preview-container {
+    max-width: 1240px;
+    margin: 0 auto;
+}
+
+body.hm-subpage .hero-content,
+body.hm-subpage .hero-display .hero-content {
+    display: grid;
+    grid-template-columns: minmax(280px, 0.92fr) minmax(320px, 1.08fr);
+    align-items: center;
+    gap: 42px;
+}
+
+body.hm-subpage .color-preview-container {
+    display: grid;
+    grid-template-columns: minmax(290px, 1fr) minmax(280px, 0.55fr);
+    align-items: center;
+    gap: 40px;
+}
+
+body.hm-subpage .color-preview-container > img,
+body.hm-subpage #bike-render,
+body.hm-subpage #bike-image,
+body.hm-subpage #main-scooter-img,
+body.hm-subpage .hero-visual img,
+body.hm-subpage .hero-bike img,
+body.hm-subpage .product-image img {
+    width: min(100%, 780px);
+    max-height: 520px;
+    object-fit: contain;
+    transition: transform 0.35s ease, opacity 0.25s ease, filter 0.35s ease;
+    filter: drop-shadow(0 24px 40px rgba(0, 0, 0, 0.24));
+}
+
+body.hm-subpage .hero-copy h1,
+body.hm-subpage .hero-content h1,
+body.hm-subpage .booking-hero h1,
+body.hm-subpage .service-hero h1,
+body.hm-subpage .hero h1 {
+    max-width: 720px;
+    color: #101010;
+    font-size: 64px;
+    line-height: 1;
+    font-weight: 900;
+    letter-spacing: 0;
+    text-transform: uppercase;
+}
+
+body.hm-subpage .hero-copy h1 span,
+body.hm-subpage .hero-content h1 span,
+body.hm-subpage .booking-hero span,
+body.hm-subpage .service-hero span,
+body.hm-subpage .section-title span,
+body.hm-subpage .section-heading h2 span {
+    color: var(--hm-red);
+}
+
+body.hm-subpage .hero-text,
+body.hm-subpage .hero-desc,
+body.hm-subpage .hero-text-block,
+body.hm-subpage .booking-hero p,
+body.hm-subpage .service-hero p {
+    max-width: 620px;
+    color: #3f3f3f;
+    font-size: 17px;
+    line-height: 1.75;
+}
+
+body.hm-subpage .hero-meta,
+body.hm-subpage .floating-stats,
+body.hm-subpage .specs,
+body.hm-subpage .performance-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(150px, 1fr));
+    gap: 14px;
+}
+
+body.hm-subpage .hero-meta div,
+body.hm-subpage .stat-box,
+body.hm-subpage .spec-item,
+body.hm-subpage .performance-card {
+    background: #fff;
+    border: 1px solid var(--hm-line);
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 12px 34px rgba(0, 0, 0, 0.08);
+}
+
+body.hm-subpage .hero-meta span,
+body.hm-subpage .stat-box p,
+body.hm-subpage .spec-item p,
+body.hm-subpage .performance-card p {
+    color: var(--hm-muted);
+    font-size: 13px;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+body.hm-subpage .hero-meta strong,
+body.hm-subpage .stat-box h2,
+body.hm-subpage .spec-item h3,
+body.hm-subpage .performance-card h3 {
+    display: block;
+    color: var(--hm-red);
+    font-size: 26px;
+    line-height: 1.15;
+    font-weight: 900;
+}
+
+body.hm-subpage .hero-actions,
+body.hm-subpage .hero-buttons,
+body.hm-subpage .slider-actions {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+}
+
+body.hm-subpage .btn-buy-large,
+body.hm-subpage .btn-primary,
+body.hm-subpage .btn-red-small,
+body.hm-subpage .pay-btn,
+body.hm-subpage .book-btn,
+body.hm-subpage .buy-now-btn,
+body.hm-subpage .hero-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 46px;
+    border: 1px solid var(--hm-red);
+    border-radius: 6px;
+    background: var(--hm-red);
+    color: #fff;
+    padding: 13px 24px;
+    font-size: 13px;
+    font-weight: 900;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+}
+
+body.hm-subpage .btn-secondary,
+body.hm-subpage .btn-outline {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 46px;
+    border: 1px solid #111;
+    border-radius: 6px;
+    background: #fff;
+    color: #111;
+    padding: 13px 24px;
+    font-size: 13px;
+    font-weight: 900;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+body.hm-subpage .btn-buy-large:hover,
+body.hm-subpage .btn-primary:hover,
+body.hm-subpage .btn-red-small:hover,
+body.hm-subpage .pay-btn:hover,
+body.hm-subpage .book-btn:hover,
+body.hm-subpage .buy-now-btn:hover,
+body.hm-subpage .hero-btn:hover {
+    transform: translateY(-2px);
+    background: #111;
+    border-color: #111;
+    color: #fff;
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.18);
+}
+
+body.hm-subpage .color-selector {
+    display: grid;
+    gap: 14px;
+    align-content: start;
+}
+
+body.hm-subpage .color-selector h3,
+body.hm-subpage .section-title h2,
+body.hm-subpage .section-heading h2,
+body.hm-subpage .features h2,
+body.hm-subpage .buy-process h2 {
+    color: var(--hm-ink);
+    font-size: 36px;
+    line-height: 1.08;
+    font-weight: 900;
+    letter-spacing: 0;
+    text-transform: uppercase;
+}
+
+body.hm-subpage .options,
+body.hm-subpage .color-selector {
+    gap: 14px;
+}
+
+body.hm-subpage .options {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+body.hm-subpage .dot,
+body.hm-subpage .color-btn {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    border: 3px solid #fff;
+    outline: 1px solid rgba(0, 0, 0, 0.25);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.14);
+    cursor: pointer;
+    transition: transform 0.2s ease, outline-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+body.hm-subpage .dot:hover,
+body.hm-subpage .dot.active,
+body.hm-subpage .color-btn:hover,
+body.hm-subpage .color-btn.active {
+    transform: scale(1.12);
+    outline-color: var(--hm-red);
+    box-shadow: 0 0 0 4px rgba(237, 28, 36, 0.16);
+}
+
+body.hm-subpage .info-section,
+body.hm-subpage .features,
+body.hm-subpage .features-section,
+body.hm-subpage .gallery-section,
+body.hm-subpage .specs-section,
+body.hm-subpage .performance-section,
+body.hm-subpage .buy-process,
+body.hm-subpage .booking-container,
+body.hm-subpage .checkout-container,
+body.hm-subpage .contact-section {
+    padding: 76px 7%;
+    background: #fff;
+}
+
+body.hm-subpage .info-section:nth-of-type(even),
+body.hm-subpage .features-section,
+body.hm-subpage .buy-process,
+body.hm-subpage .checkout-container,
+body.hm-subpage .booking-container {
+    background: var(--hm-soft);
+}
+
+body.hm-subpage .grid,
+body.hm-subpage .features-grid,
+body.hm-subpage .feature-grid,
+body.hm-subpage .specs-grid,
+body.hm-subpage .tech-grid,
+body.hm-subpage .process-steps,
+body.hm-subpage .gallery-grid {
+    max-width: 1280px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 22px;
+}
+
+body.hm-subpage .feature-card,
+body.hm-subpage .spec-card,
+body.hm-subpage .step,
+body.hm-subpage .form-box,
+body.hm-subpage .booking-form,
+body.hm-subpage .summary-box,
+body.hm-subpage .checkout-section,
+body.hm-subpage .order-summary,
+body.hm-subpage .payment-option,
+body.hm-subpage .pay-method-box {
+    background: #fff;
+    color: #111;
+    border: 1px solid var(--hm-line);
+    border-radius: 8px;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
+}
+
+body.hm-subpage .feature-card,
+body.hm-subpage .spec-card,
+body.hm-subpage .step,
+body.hm-subpage .checkout-section,
+body.hm-subpage .order-summary {
+    padding: 26px;
+}
+
+body.hm-subpage .feature-card:hover,
+body.hm-subpage .spec-card:hover,
+body.hm-subpage .step:hover {
+    transform: translateY(-4px);
+    border-color: rgba(237, 28, 36, 0.5);
+}
+
+body.hm-subpage .feature-card h3,
+body.hm-subpage .feature-card h4,
+body.hm-subpage .spec-card h4,
+body.hm-subpage .step h3 {
+    color: #111;
+    font-weight: 900;
+}
+
+body.hm-subpage .feature-card p,
+body.hm-subpage .spec-card p,
+body.hm-subpage .step p,
+body.hm-subpage .footer-col p {
+    color: #5f5f5f;
+    line-height: 1.65;
+}
+
+body.hm-subpage .feature-card img,
+body.hm-subpage .about-card img,
+body.hm-subpage .gallery-grid img {
+    width: 100%;
+    min-height: 210px;
+    object-fit: contain;
+    background: #f7f7f7;
+    border-radius: 8px;
+}
+
+body.hm-subpage .step-number,
+body.hm-subpage .step span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    margin-bottom: 14px;
+    border-radius: 50%;
+    background: var(--hm-red);
+    color: #fff;
+    font-weight: 900;
+}
+
+body.hm-subpage .spec-table {
+    width: min(100%, 980px);
+    margin: 0 auto;
+    border-collapse: collapse;
+    background: #fff;
+    border: 1px solid var(--hm-line);
+    box-shadow: var(--hm-shadow);
+}
+
+body.hm-subpage .spec-table td {
+    padding: 18px 22px;
+    border-bottom: 1px solid var(--hm-line);
+    color: #111;
+}
+
+body.hm-subpage .spec-table td:first-child {
+    width: 42%;
+    color: var(--hm-muted);
+    font-weight: 900;
+    text-transform: uppercase;
+}
+
+body.hm-subpage .final-cta,
+body.hm-subpage .cta-section {
+    padding: 76px 7%;
+    text-align: center;
+    background:
+        linear-gradient(105deg, rgba(237, 28, 36, 0.12) 0 42%, transparent 42%),
+        #111;
+    color: #fff;
+}
+
+body.hm-subpage .final-cta h2,
+body.hm-subpage .cta-section h2 {
+    color: #fff;
+    font-size: 44px;
+    line-height: 1.08;
+    font-weight: 900;
+    text-transform: uppercase;
+}
+
+body.hm-subpage .final-cta p,
+body.hm-subpage .cta-section p {
+    color: #d9d9d9;
+}
+
+body.hm-subpage .site-footer {
+    padding: 54px 7% 30px;
+    background: #080808;
+    color: #fff;
+    border-top: 4px solid var(--hm-red);
+}
+
+body.hm-subpage .footer-content {
+    max-width: 1280px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(220px, 1fr));
+    gap: 28px;
+}
+
+body.hm-subpage .footer-col h4,
+body.hm-subpage .site-footer h3,
+body.hm-subpage .site-footer h4 {
+    color: #fff;
+    margin-bottom: 12px;
+    font-weight: 900;
+    text-transform: uppercase;
+}
+
+body.hm-subpage .footer-col a,
+body.hm-subpage .site-footer a {
+    display: inline-block;
+    color: #d8d8d8;
+    margin: 2px 0;
+}
+
+body.hm-subpage .footer-col a:hover,
+body.hm-subpage .site-footer a:hover {
+    color: var(--hm-red);
+}
+
+body.hm-subpage .footer-bottom,
+body.hm-subpage .footer-note {
+    max-width: 1280px;
+    margin: 26px auto 0;
+    padding-top: 16px;
+    border-top: 1px solid rgba(255, 255, 255, 0.14);
+    color: #9c9c9c;
+    text-align: center;
+}
+
+body.hm-subpage .hm-back-to-top {
+    position: fixed;
+    right: 18px;
+    bottom: 18px;
+    z-index: 3200;
+    width: 44px;
+    height: 44px;
+    border: 0;
+    border-radius: 50%;
+    background: var(--hm-red);
+    color: #fff;
+    font-size: 20px;
+    font-weight: 900;
+    cursor: pointer;
+    opacity: 0;
+    transform: translateY(14px);
+    pointer-events: none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+body.hm-subpage .hm-back-to-top.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+body.hm-subpage img.hm-image-missing {
+    padding: 28px;
+    object-fit: contain;
+    background: #fff;
+}
+
+@media (max-width: 1020px) {
+    body.hm-subpage .nav-links {
+        display: none;
+    }
+
+    body.hm-subpage .hero-content,
+    body.hm-subpage .hero-display .hero-content,
+    body.hm-subpage .color-preview-container {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+
+    body.hm-subpage .hero-actions,
+    body.hm-subpage .hero-buttons,
+    body.hm-subpage .options,
+    body.hm-subpage .price-container,
+    body.hm-subpage .right-side {
+        justify-content: center;
+    }
+
+    body.hm-subpage .hero-copy h1,
+    body.hm-subpage .hero-content h1,
+    body.hm-subpage .booking-hero h1,
+    body.hm-subpage .service-hero h1,
+    body.hm-subpage .hero h1 {
+        margin: 0 auto;
+        font-size: 48px;
+    }
+
+    body.hm-subpage .hero-meta,
+    body.hm-subpage .floating-stats,
+    body.hm-subpage .specs,
+    body.hm-subpage .performance-grid,
+    body.hm-subpage .grid,
+    body.hm-subpage .features-grid,
+    body.hm-subpage .feature-grid,
+    body.hm-subpage .specs-grid,
+    body.hm-subpage .tech-grid,
+    body.hm-subpage .process-steps,
+    body.hm-subpage .gallery-grid,
+    body.hm-subpage .footer-content {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    body.hm-subpage .sub-nav-content {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+}
+
+@media (max-width: 680px) {
+    body.hm-subpage {
+        padding-top: 68px;
+    }
+
+    body.hm-subpage .main-header,
+    body.hm-subpage .navbar,
+    body.hm-subpage .hm-generated-header {
+        min-height: 68px;
+    }
+
+    body.hm-subpage .hm-generated-header .nav-container,
+    body.hm-subpage .main-header .nav-container,
+    body.hm-subpage .navbar .nav-container {
+        min-height: 68px;
+        padding: 0 18px;
+    }
+
+    body.hm-subpage .logo,
+    body.hm-subpage .hm-generated-header .logo {
+        width: 52px;
+        height: 52px;
+    }
+
+    body.hm-subpage .logo img,
+    body.hm-subpage .hm-generated-header .logo img {
+        width: 48px;
+        height: 48px;
+    }
+
+    body.hm-subpage .sub-navbar {
+        top: 68px;
+        padding: 12px 5%;
+    }
+
+    body.hm-subpage .hero-display,
+    body.hm-subpage .hero-section,
+    body.hm-subpage .hero,
+    body.hm-subpage .booking-hero,
+    body.hm-subpage .service-hero,
+    body.hm-subpage .hero-explore-page {
+        min-height: auto;
+        padding: 54px 5%;
+        background:
+            linear-gradient(180deg, #ffffff 0%, #f6f7f8 62%, #111 62%, #050505 100%);
+    }
+
+    body.hm-subpage .hero-copy h1,
+    body.hm-subpage .hero-content h1,
+    body.hm-subpage .booking-hero h1,
+    body.hm-subpage .service-hero h1,
+    body.hm-subpage .hero h1 {
+        font-size: 38px;
+    }
+
+    body.hm-subpage .hero-meta,
+    body.hm-subpage .floating-stats,
+    body.hm-subpage .specs,
+    body.hm-subpage .performance-grid,
+    body.hm-subpage .grid,
+    body.hm-subpage .features-grid,
+    body.hm-subpage .feature-grid,
+    body.hm-subpage .specs-grid,
+    body.hm-subpage .tech-grid,
+    body.hm-subpage .process-steps,
+    body.hm-subpage .gallery-grid,
+    body.hm-subpage .footer-content {
+        grid-template-columns: 1fr;
+    }
+
+    body.hm-subpage .info-section,
+    body.hm-subpage .features,
+    body.hm-subpage .features-section,
+    body.hm-subpage .gallery-section,
+    body.hm-subpage .specs-section,
+    body.hm-subpage .performance-section,
+    body.hm-subpage .buy-process,
+    body.hm-subpage .booking-container,
+    body.hm-subpage .checkout-container,
+    body.hm-subpage .contact-section,
+    body.hm-subpage .final-cta,
+    body.hm-subpage .cta-section,
+    body.hm-subpage .site-footer {
+        padding-left: 5%;
+        padding-right: 5%;
+    }
+
+    body.hm-subpage .variant-selector,
+    body.hm-subpage .variant-selector select,
+    body.hm-subpage .btn-buy-large,
+    body.hm-subpage .btn-primary,
+    body.hm-subpage .btn-secondary,
+    body.hm-subpage .btn-red-small,
+    body.hm-subpage .pay-btn,
+    body.hm-subpage .book-btn,
+    body.hm-subpage .buy-now-btn,
+    body.hm-subpage .hero-btn {
+        width: 100%;
+    }
+}
+
+/* Shared mobile navigation controls (home + subpages) */
+.hm-mobile-nav-toggle {
+    display: none;
+    width: 42px;
+    height: 42px;
+    margin-left: auto;
+    flex: 0 0 auto;
+    position: relative;
+    z-index: 3355;
+    border: 1px solid rgba(0, 0, 0, 0.16);
+    border-radius: 10px;
+    background: #fff;
+    color: #111;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    flex-direction: column;
+}
+
+.hm-mobile-nav-toggle span {
+    width: 18px;
+    height: 2px;
+    border-radius: 999px;
+    background: #181818;
+    transition: transform 0.24s ease, opacity 0.2s ease;
+}
+
+.hm-mobile-nav-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+    z-index: 3150;
+}
+
+@media (max-width: 1020px) {
+    .main-header .nav-container,
+    .navbar .nav-container,
+    .hm-generated-header .nav-container {
+        gap: 10px;
+    }
+
+    .main-header .nav-actions,
+    .navbar .nav-actions,
+    .hm-generated-header .nav-actions,
+    .hm-generated-header .hm-nav-cta {
+        display: none;
+    }
+
+    .hm-mobile-nav-toggle {
+        display: inline-flex;
+    }
+
+    .main-header .nav-links.hm-mobile-nav-panel,
+    .navbar .nav-links.hm-mobile-nav-panel,
+    .hm-generated-header .nav-links.hm-mobile-nav-panel {
+        display: none;
+        position: fixed;
+        top: var(--hm-mobile-nav-top, 72px);
+        left: 12px;
+        right: 12px;
+        max-height: var(--hm-mobile-nav-max-height, calc(100vh - 86px));
+        overflow-y: auto;
+        overflow-x: hidden;
+        -webkit-overflow-scrolling: touch;
+        margin: 0;
+        padding: 14px;
+        border: 1px solid rgba(0, 0, 0, 0.14);
+        border-radius: 14px;
+        background: #fff;
+        box-shadow: 0 24px 60px rgba(0, 0, 0, 0.18);
+        z-index: 3300;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+    }
+
+    body.hm-mobile-nav-open .main-header .nav-links.hm-mobile-nav-panel,
+    body.hm-mobile-nav-open .navbar .nav-links.hm-mobile-nav-panel,
+    body.hm-mobile-nav-open .hm-generated-header .nav-links.hm-mobile-nav-panel {
+        display: flex;
+    }
+
+    .main-header .nav-links.hm-mobile-nav-panel > li,
+    .navbar .nav-links.hm-mobile-nav-panel > li,
+    .hm-generated-header .nav-links.hm-mobile-nav-panel > li {
+        width: 100%;
+    }
+
+    .main-header .nav-links.hm-mobile-nav-panel > li > a,
+    .navbar .nav-links.hm-mobile-nav-panel > li > a,
+    .hm-generated-header .nav-links.hm-mobile-nav-panel > li > a {
+        min-height: 0;
+        padding: 12px 10px;
+        border-radius: 8px;
+        font-size: 0.82rem;
+        letter-spacing: 0.05em;
+        background: #fff;
+    }
+
+    .main-header .nav-links.hm-mobile-nav-panel > li > a:hover,
+    .navbar .nav-links.hm-mobile-nav-panel > li > a:hover,
+    .hm-generated-header .nav-links.hm-mobile-nav-panel > li > a:hover {
+        background: #f4f4f4;
+    }
+
+    .main-header .nav-links.hm-mobile-nav-panel .has-dropdown > .dropdown-menu,
+    .main-header .nav-links.hm-mobile-nav-panel .has-dropdown > .dropdown-content,
+    .navbar .nav-links.hm-mobile-nav-panel .has-dropdown > .dropdown-menu,
+    .navbar .nav-links.hm-mobile-nav-panel .has-dropdown > .dropdown-content,
+    .hm-generated-header .nav-links.hm-mobile-nav-panel .has-dropdown > .dropdown-menu,
+    .hm-generated-header .nav-links.hm-mobile-nav-panel .has-dropdown > .dropdown-content {
+        position: static;
+        top: auto;
+        left: auto;
+        right: auto;
+        width: 100%;
+        min-width: 0;
+        max-width: 100%;
+        max-height: 0;
+        margin: 0;
+        padding: 0;
+        border: 0;
+        border-radius: 10px;
+        box-shadow: none;
+        background: #f8f8f8;
+        overflow: hidden;
+        opacity: 1;
+        visibility: visible;
+        transform: none;
+        transition: max-height 0.28s ease;
+    }
+
+    .main-header .nav-links.hm-mobile-nav-panel .has-dropdown.open > .dropdown-menu,
+    .main-header .nav-links.hm-mobile-nav-panel .has-dropdown.open > .dropdown-content,
+    .navbar .nav-links.hm-mobile-nav-panel .has-dropdown.open > .dropdown-menu,
+    .navbar .nav-links.hm-mobile-nav-panel .has-dropdown.open > .dropdown-content,
+    .hm-generated-header .nav-links.hm-mobile-nav-panel .has-dropdown.open > .dropdown-menu,
+    .hm-generated-header .nav-links.hm-mobile-nav-panel .has-dropdown.open > .dropdown-content {
+        max-height: 62vh;
+        margin-top: 6px;
+        padding: 10px;
+        border: 1px solid #e1e1e1;
+        overflow-y: auto;
+        overflow-x: hidden;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .main-header .nav-links.hm-mobile-nav-panel .dropdown-menu.mini-menu,
+    .navbar .nav-links.hm-mobile-nav-panel .dropdown-menu.mini-menu,
+    .hm-generated-header .nav-links.hm-mobile-nav-panel .dropdown-menu.mini-menu {
+        position: static;
+        top: auto;
+        left: auto;
+        right: auto;
+        width: 100%;
+        max-width: 100%;
+        transform: none;
+    }
+
+    .main-header .nav-links.hm-mobile-nav-panel .premium-mega-menu,
+    .navbar .nav-links.hm-mobile-nav-panel .premium-mega-menu,
+    .hm-generated-header .nav-links.hm-mobile-nav-panel .premium-mega-menu {
+        min-width: 0;
+        width: 100%;
+        max-width: 100%;
+        padding: 10px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .main-header .nav-links.hm-mobile-nav-panel .premium-sidebar,
+    .navbar .nav-links.hm-mobile-nav-panel .premium-sidebar,
+    .hm-generated-header .nav-links.hm-mobile-nav-panel .premium-sidebar {
+        flex: 0 0 auto;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+    }
+
+    .main-header .nav-links.hm-mobile-nav-panel .premium-bike-layout,
+    .navbar .nav-links.hm-mobile-nav-panel .premium-bike-layout,
+    .hm-generated-header .nav-links.hm-mobile-nav-panel .premium-bike-layout {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .main-header .nav-links.hm-mobile-nav-panel .hero-dropdown,
+    .navbar .nav-links.hm-mobile-nav-panel .hero-dropdown,
+    .hm-generated-header .nav-links.hm-mobile-nav-panel .hero-dropdown {
+        width: 100%;
+        max-width: 100%;
+        left: 0;
+        padding: 10px;
+    }
+
+    .main-header .nav-links.hm-mobile-nav-panel .dropdown-inner,
+    .navbar .nav-links.hm-mobile-nav-panel .dropdown-inner,
+    .hm-generated-header .nav-links.hm-mobile-nav-panel .dropdown-inner {
+        min-width: 0;
+    }
+
+    .main-header .nav-links.hm-mobile-nav-panel .hm-mobile-nav-cta-item > a,
+    .navbar .nav-links.hm-mobile-nav-panel .hm-mobile-nav-cta-item > a,
+    .hm-generated-header .nav-links.hm-mobile-nav-panel .hm-mobile-nav-cta-item > a {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        min-height: 42px;
+        margin-top: 8px;
+        border-radius: 8px;
+        background: #ed1c24;
+        color: #fff;
+        font-size: 0.78rem;
+        font-weight: 900;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+    }
+
+    body.hm-mobile-nav-open .hm-mobile-nav-backdrop {
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    body.hm-mobile-nav-open .hm-mobile-nav-toggle span:nth-child(1) {
+        transform: translateY(7px) rotate(45deg);
+    }
+
+    body.hm-mobile-nav-open .hm-mobile-nav-toggle span:nth-child(2) {
+        opacity: 0;
+    }
+
+    body.hm-mobile-nav-open .hm-mobile-nav-toggle span:nth-child(3) {
+        transform: translateY(-7px) rotate(-45deg);
+    }
+}

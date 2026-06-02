@@ -1,0 +1,117 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    /* Uses a black HF 100 background image */
+    background: #000 url('hf-100-bg.jpg') no-repeat center center fixed;
+    background-size: cover;
+    color: #fff;
+    font-family: 'Inter', sans-serif;
+}
+
+/* Sub-Navbar Layout */
+.sub-navbar {
+    position: sticky;
+    top: 0;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 2px solid #ed1c24; /* Red Accent */
+    padding: 15px 5%;
+    z-index: 1000;
+}
+
+.sub-nav-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.model-name {
+    font-size: 2rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    color: #fff;
+    letter-spacing: 2px;
+}
+
+.price-container {
+    display: flex;
+    flex-direction: column;
+    text-align: right;
+}
+
+.price-tag {
+    color: #ed1c24;
+    font-size: 1.6rem;
+    font-weight: 900;
+}
+
+.ex-showroom {
+    color: #aaa;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Hero Section & Color Switcher */
+.hero-display {
+    min-height: 85vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* Dark gradient overlay for readability */
+    background: linear-gradient(to bottom, rgba(0,0,0,0.7), #000); 
+    padding: 40px 0;
+}
+
+.color-preview-container {
+    text-align: center;
+    width: 100%;
+    max-width: 1000px;
+}
+
+#bike-render {
+    max-width: 75%; /* Scaled for standard commuter proportions */
+    height: auto;
+    transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    filter: drop-shadow(0 20px 40px rgba(0,0,0,0.8));
+    margin-bottom: 20px;
+}
+
+.color-selector h3 { color: #fff; letter-spacing: 3px; font-size: 1rem; opacity: 0.8;}
+.options { display: flex; justify-content: center; gap: 20px; margin: 15px 0; }
+.dot { width: 35px; height: 35px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: 0.3s; box-shadow: 0 4px 10px rgba(0,0,0,0.5);}
+.dot.active { border-color: #fff; transform: scale(1.2); box-shadow: 0 0 15px rgba(237, 28, 36, 0.6); }
+#color-name { margin-bottom: 30px; font-weight: bold; color: #ccc; }
+
+/* Buy Now Button */
+.btn-buy-large {
+    display: inline-block;
+    background: #ed1c24;
+    color: #fff;
+    padding: 15px 50px;
+    font-size: 1.2rem;
+    font-weight: 900;
+    text-decoration: none;
+    transition: 0.3s;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+.btn-buy-large:hover { background: #fff; color: #ed1c24; transform: translateY(-3px); box-shadow: 0 10px 20px rgba(237, 28, 36, 0.3); }
+
+/* Info Sections (Specs & Tech) */
+.info-section { padding: 80px 8%; background: #000; }
+.section-title h2 { font-size: 2.5rem; font-weight: 900; margin-bottom: 40px; border-bottom: 1px solid #333; padding-bottom: 10px;}
+.section-title span { color: #ed1c24; }
+
+.grid { display: grid; gap: 30px; }
+.specs-grid { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+.tech-grid { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+
+.feature-card { background: #111; padding: 30px; border-left: 4px solid #ed1c24; transition: 0.3s;}
+.feature-card:hover { background: #1a1a1a; transform: translateY(-5px); }
+.feature-card h3 { color: #fff; font-size: 2.2rem; margin: 10px 0; }
+.feature-card h4 { color: #ed1c24; font-size: 1.1rem; text-transform: uppercase; }
+.feature-card p { color: #aaa; font-size: 0.9rem; line-height: 1.5; }
+.feature-card .icon { font-size: 2rem; margin-bottom: 15px; }
