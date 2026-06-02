@@ -51,6 +51,16 @@ function initMenu() {
         }
     }
 
+    function openAllSubmenus() {
+        for (var i = 0; i < submenuParents.length; i += 1) {
+            addClass(submenuParents[i], "submenu-open");
+            var btn = submenuParents[i].querySelector(".nav-btn");
+            if (btn) {
+                btn.setAttribute("aria-expanded", "true");
+            }
+        }
+    }
+
     function setMenuOpen(isOpen) {
         if (isOpen) {
             addClass(mainNav, "is-open");
@@ -58,6 +68,9 @@ function initMenu() {
             addClass(document.body, "menu-open");
             mainNav.setAttribute("data-open", "true");
             menuToggle.setAttribute("aria-expanded", "true");
+            if (isMobile()) {
+                openAllSubmenus();
+            }
         } else {
             removeClass(mainNav, "is-open");
             removeClass(menuToggle, "is-active");
@@ -121,12 +134,7 @@ function initMenu() {
                 }
                 if (event && event.preventDefault) event.preventDefault();
                 if (event && event.stopPropagation) event.stopPropagation();
-                var shouldOpen = !hasClass(parent, "submenu-open");
-                closeAllSubmenus();
-                if (shouldOpen) {
-                    addClass(parent, "submenu-open");
-                }
-                button.setAttribute("aria-expanded", shouldOpen ? "true" : "false");
+                openAllSubmenus();
             }
             button.addEventListener("click", handleSubmenuToggle);
             button.addEventListener("touchstart", handleSubmenuToggle, false);

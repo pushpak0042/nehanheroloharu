@@ -802,21 +802,21 @@ footer[id] {
 
     .main-nav {
         position: fixed;
-        top: 72px;
-        left: 12px;
-        right: 12px;
-        bottom: 12px;
-        border-radius: 14px;
+        top: 66px;
+        left: 6px;
+        right: 6px;
+        bottom: 6px;
+        border-radius: 10px;
         border: 1px solid #d5dae2;
         background: #ffffff;
         box-shadow: 0 24px 48px rgba(15, 23, 42, 0.2);
-        padding: 14px;
+        padding: 16px;
         display: none;
         overflow-y: auto;
         z-index: 1100;
         flex-direction: column;
         align-items: stretch;
-        gap: 10px;
+        gap: 14px;
         overscroll-behavior: contain;
     }
 
@@ -828,14 +828,23 @@ footer[id] {
     .nav-list {
         flex-direction: column;
         align-items: stretch;
-        gap: 6px;
+        gap: 10px;
+    }
+
+    .has-submenu {
+        border: 1px solid #e4e9f1;
+        border-radius: 12px;
+        background: #f9fbfd;
+        padding: 8px;
     }
 
     .nav-list > li > a,
     .nav-btn {
         width: 100%;
         text-align: left;
-        border: 1px solid #eaedf1;
+        border: 1px solid #e4e9f1;
+        background: #ffffff;
+        padding: 13px 14px;
     }
 
     .submenu-panel {
@@ -849,22 +858,24 @@ footer[id] {
         opacity: 1;
         transform: none;
         pointer-events: auto;
-        max-height: 0;
-        overflow: hidden;
-        padding: 0 10px;
-        transition: max-height 0.25s ease, padding 0.25s ease;
+        max-height: none;
+        overflow: visible;
+        padding: 10px;
+        transition: none;
     }
 
     .has-submenu:hover .submenu-panel,
     .has-submenu:focus-within .submenu-panel {
-        max-height: 0;
-        padding-top: 0;
-        padding-bottom: 0;
+        max-height: none;
+        padding-top: 10px;
+        padding-bottom: 10px;
     }
 
+    .main-nav.is-open .submenu-panel,
+    .main-nav[data-open="true"] .submenu-panel,
     .has-submenu.submenu-open .submenu-panel {
-        max-height: 72vh;
-        overflow-y: auto;
+        max-height: none;
+        overflow: visible;
         padding-top: 10px;
         padding-bottom: 10px;
     }
@@ -874,20 +885,21 @@ footer[id] {
     #submenu-scooters,
     #submenu-vida {
         width: 100%;
-        max-height: 72vh;
+        max-height: none;
         padding: 10px;
     }
 
     .mega-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 4px 8px;
     }
 
     .mega-group {
-        gap: 2px;
+        gap: 4px;
     }
 
     .mega-group h4 {
-        margin: 2px 2px 6px;
+        margin: 4px 2px 6px;
         font-size: 0.84rem;
         color: #4a5260;
     }
@@ -895,11 +907,12 @@ footer[id] {
     .mega-link {
         grid-template-columns: 1fr;
         gap: 0;
-        padding: 10px 8px;
+        min-height: 42px;
+        padding: 9px 8px;
         border: 0;
-        border-radius: 0;
-        background: transparent;
-        border-bottom: 1px solid #edf1f6;
+        border-radius: 8px;
+        background: #ffffff;
+        border-bottom: 0;
     }
 
     .mega-link:hover {
@@ -913,16 +926,17 @@ footer[id] {
     }
 
     .mega-link strong {
-        font-size: 0.94rem;
+        font-size: 0.86rem;
         letter-spacing: 0.02em;
         font-family: "Sora", sans-serif;
         text-transform: none;
+        overflow-wrap: anywhere;
     }
 
     .nav-actions {
         display: flex;
-        margin-top: auto;
-        padding-top: 8px;
+        margin-top: 0;
+        padding-top: 10px;
         border-top: 1px solid #eaedf1;
     }
 

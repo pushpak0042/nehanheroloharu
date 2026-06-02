@@ -348,21 +348,21 @@ img {
 
     .sub-nav {
         position: fixed;
-        top: 76px;
-        left: 12px;
-        right: 12px;
-        bottom: 12px;
+        top: 68px;
+        left: 6px;
+        right: 6px;
+        bottom: 6px;
         z-index: 950;
         border: 1px solid var(--hm-line);
-        border-radius: 12px;
+        border-radius: 10px;
         background: #fff;
         box-shadow: 0 24px 44px rgba(0, 0, 0, 0.2);
-        padding: 14px;
+        padding: 16px;
         display: none;
         overflow-y: auto;
         flex-direction: column;
         align-items: stretch;
-        gap: 10px;
+        gap: 12px;
     }
 
     .sub-nav.is-open,
@@ -373,10 +373,13 @@ img {
     .sub-nav-links {
         flex-direction: column;
         align-items: stretch;
+        gap: 8px;
     }
 
     .sub-nav-links a {
         border: 1px solid #e4e9f1;
+        padding: 14px 14px;
+        background: #ffffff;
     }
 
     .sub-nav .btn-book {
