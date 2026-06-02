@@ -10,6 +10,8 @@ function initMenu() {
     var menuBackdrop = document.getElementById("menuBackdrop");
     var submenuParents = document.querySelectorAll(".has-submenu");
     var lastTouchToggle = 0;
+    var originalNavParent = mainNav ? mainNav.parentNode : null;
+    var originalNavNext = mainNav ? mainNav.nextSibling : null;
 
     if (!menuToggle || !mainNav) {
         return;
@@ -41,6 +43,26 @@ function initMenu() {
         return window.innerWidth <= 1020;
     }
 
+    function placeDrawerForViewport() {
+        if (!originalNavParent) {
+            return;
+        }
+
+        if (isMobile()) {
+            if (mainNav.parentNode !== document.body) {
+                document.body.appendChild(mainNav);
+            }
+            if (menuBackdrop && menuBackdrop.parentNode !== document.body) {
+                document.body.appendChild(menuBackdrop);
+            }
+            return;
+        }
+
+        if (mainNav.parentNode !== originalNavParent) {
+            originalNavParent.insertBefore(mainNav, originalNavNext);
+        }
+    }
+
     function closeAllSubmenus() {
         for (var i = 0; i < submenuParents.length; i += 1) {
             removeClass(submenuParents[i], "submenu-open");
@@ -62,6 +84,8 @@ function initMenu() {
     }
 
     function setMenuOpen(isOpen) {
+        placeDrawerForViewport();
+
         if (isOpen) {
             addClass(mainNav, "is-open");
             addClass(menuToggle, "is-active");
@@ -161,6 +185,9 @@ function initMenu() {
             closeMenu();
             mainNav.classList.remove("is-open");
             menuToggle.setAttribute("aria-expanded", "false");
+            placeDrawerForViewport();
+        } else {
+            placeDrawerForViewport();
         }
     });
 

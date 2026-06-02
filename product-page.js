@@ -8,6 +8,8 @@ function initSubMenu() {
     var nav = document.getElementById("subNav");
     var backdrop = document.getElementById("subMenuBackdrop");
     var lastTouchToggle = 0;
+    var originalNavParent = nav ? nav.parentNode : null;
+    var originalNavNext = nav ? nav.nextSibling : null;
 
     if (!toggle || !nav || !backdrop) {
         return;
@@ -39,7 +41,29 @@ function initSubMenu() {
         return window.innerWidth <= 980;
     }
 
+    function placeDrawerForViewport() {
+        if (!originalNavParent) {
+            return;
+        }
+
+        if (isMobile()) {
+            if (nav.parentNode !== document.body) {
+                document.body.appendChild(nav);
+            }
+            if (backdrop.parentNode !== document.body) {
+                document.body.appendChild(backdrop);
+            }
+            return;
+        }
+
+        if (nav.parentNode !== originalNavParent) {
+            originalNavParent.insertBefore(nav, originalNavNext);
+        }
+    }
+
     function setMenuOpen(isOpen) {
+        placeDrawerForViewport();
+
         if (isOpen) {
             addClass(nav, "is-open");
             addClass(toggle, "is-active");
@@ -97,6 +121,9 @@ function initSubMenu() {
     window.addEventListener("resize", function () {
         if (!isMobile()) {
             closeMenu();
+            placeDrawerForViewport();
+        } else {
+            placeDrawerForViewport();
         }
     });
 }
