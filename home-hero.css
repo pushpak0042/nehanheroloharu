@@ -107,6 +107,10 @@ footer[id] {
     list-style: none;
 }
 
+.mobile-menu-home {
+    display: none;
+}
+
 .nav-list > li > a,
 .nav-btn {
     appearance: none;
@@ -802,21 +806,23 @@ footer[id] {
 
     .main-nav {
         position: fixed;
-        top: 66px;
-        left: 6px;
-        right: 6px;
-        bottom: 6px;
-        border-radius: 10px;
-        border: 1px solid #d5dae2;
+        top: 0;
+        left: 0;
+        right: auto;
+        bottom: 0;
+        width: min(82vw, 430px);
+        border-radius: 0;
+        border: 0;
+        border-right: 1px solid #d5dae2;
         background: #ffffff;
-        box-shadow: 0 24px 48px rgba(15, 23, 42, 0.2);
-        padding: 16px;
+        box-shadow: 22px 0 44px rgba(15, 23, 42, 0.24);
+        padding: 22px 18px 30px;
         display: none;
         overflow-y: auto;
-        z-index: 1100;
+        z-index: 1210;
         flex-direction: column;
         align-items: stretch;
-        gap: 14px;
+        gap: 16px;
         overscroll-behavior: contain;
     }
 
@@ -828,46 +834,82 @@ footer[id] {
     .nav-list {
         flex-direction: column;
         align-items: stretch;
-        gap: 10px;
+        gap: 12px;
+    }
+
+    .mobile-menu-home {
+        display: block;
     }
 
     .has-submenu {
-        border: 1px solid #e4e9f1;
-        border-radius: 12px;
-        background: #f9fbfd;
-        padding: 8px;
+        border: 0;
+        border-radius: 0;
+        background: #ffffff;
+        padding: 0;
     }
 
     .nav-list > li > a,
     .nav-btn {
         width: 100%;
+        min-height: 54px;
         text-align: left;
-        border: 1px solid #e4e9f1;
+        border: 0;
+        border-radius: 0;
+        border-bottom: 1px solid #edf1f6;
         background: #ffffff;
-        padding: 13px 14px;
+        padding: 12px 4px;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        font-family: "Sora", sans-serif;
+        font-size: 1rem;
+        font-weight: 700;
+        letter-spacing: 0;
+        text-transform: none;
+        color: #1f2630;
+    }
+
+    .nav-list > li > a::before,
+    .nav-btn::before {
+        content: "";
+        flex: 0 0 auto;
+        width: 24px;
+        height: 24px;
+        border: 2px solid #4b5563;
+        border-radius: 6px;
+    }
+
+    .nav-btn::after {
+        content: "";
+        width: 9px;
+        height: 9px;
+        margin-left: auto;
+        border-right: 2px solid #4b5563;
+        border-bottom: 2px solid #4b5563;
+        transform: rotate(45deg);
     }
 
     .submenu-panel {
         position: static;
-        width: 100%;
+        width: calc(100% - 40px);
         max-width: 100%;
-        border-radius: 10px;
+        border-radius: 0;
         box-shadow: none;
-        border: 1px solid #eaedf1;
-        margin-top: 6px;
+        border: 0;
+        margin: 0 0 4px 40px;
         opacity: 1;
         transform: none;
         pointer-events: auto;
         max-height: none;
         overflow: visible;
-        padding: 10px;
+        padding: 2px 0 10px;
         transition: none;
     }
 
     .has-submenu:hover .submenu-panel,
     .has-submenu:focus-within .submenu-panel {
         max-height: none;
-        padding-top: 10px;
+        padding-top: 2px;
         padding-bottom: 10px;
     }
 
@@ -876,7 +918,7 @@ footer[id] {
     .has-submenu.submenu-open .submenu-panel {
         max-height: none;
         overflow: visible;
-        padding-top: 10px;
+        padding-top: 2px;
         padding-bottom: 10px;
     }
 
@@ -884,14 +926,14 @@ footer[id] {
     #submenu-motorcycles,
     #submenu-scooters,
     #submenu-vida {
-        width: 100%;
+        width: calc(100% - 40px);
         max-height: none;
-        padding: 10px;
+        padding: 2px 0 10px;
     }
 
     .mega-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 4px 8px;
+        grid-template-columns: 1fr;
+        gap: 0;
     }
 
     .mega-group {
@@ -899,18 +941,18 @@ footer[id] {
     }
 
     .mega-group h4 {
-        margin: 4px 2px 6px;
-        font-size: 0.84rem;
+        margin: 12px 0 4px;
+        font-size: 0.72rem;
         color: #4a5260;
     }
 
     .mega-link {
         grid-template-columns: 1fr;
         gap: 0;
-        min-height: 42px;
-        padding: 9px 8px;
+        min-height: 36px;
+        padding: 7px 0;
         border: 0;
-        border-radius: 8px;
+        border-radius: 0;
         background: #ffffff;
         border-bottom: 0;
     }
@@ -926,7 +968,7 @@ footer[id] {
     }
 
     .mega-link strong {
-        font-size: 0.86rem;
+        font-size: 0.88rem;
         letter-spacing: 0.02em;
         font-family: "Sora", sans-serif;
         text-transform: none;
@@ -936,7 +978,7 @@ footer[id] {
     .nav-actions {
         display: flex;
         margin-top: 0;
-        padding-top: 10px;
+        padding-top: 12px;
         border-top: 1px solid #eaedf1;
     }
 
