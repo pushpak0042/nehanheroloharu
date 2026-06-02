@@ -288,7 +288,7 @@ foreach($p in $pages) {
 <head>
     <meta charset='UTF-8'>
     <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-    <title>$($p.name) | Hero MotoCorp</title>
+    <title>$($p.name) | Nehan Hero</title>
     <link rel='preconnect' href='https://fonts.googleapis.com'>
     <link rel='preconnect' href='https://fonts.gstatic.com' crossorigin>
     <link href='https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Sora:wght@400;500;600&display=swap' rel='stylesheet'>
@@ -297,8 +297,8 @@ foreach($p in $pages) {
 <body>
     <header class='sub-header'>
         <div class='sub-header-inner'>
-            <a class='sub-brand' href='index.html' aria-label='Hero Home'>
-                <img src='nehan hero logo.png' alt='Hero MotoCorp'>
+            <a class='sub-brand' href='index.html' aria-label='Nehan Hero Home'>
+                <img src='nehan hero logo.png' alt='Nehan Hero'>
             </a>
             <button class='sub-menu-toggle' id='subMenuToggle' aria-expanded='false' aria-controls='subNav' aria-label='Toggle navigation'>
                 <span></span><span></span><span></span>
@@ -364,7 +364,7 @@ foreach($p in $pages) {
             </article>
         </section>
 
-        <p class='sub-footer'>Hero MotoCorp &middot; Model Showcase Page &middot; Nehan Hero Loharu</p>
+        <p class='sub-footer'>Nehan Hero &middot; Model Showcase Page &middot; Nehan Hero Loharu</p>
     </main>
 
     <script src='product-page.js'></script>
