@@ -131,9 +131,49 @@ function initSubMenu() {
 function initVariantPreview() {
     var image = document.getElementById("productMainImage");
     var buttons = document.querySelectorAll(".variant-btn[data-image]");
+    var bookingLinks = document.querySelectorAll(".sub-nav .btn-book[href^='booking.html'], .product-actions .btn-book[href^='booking.html']");
 
     if (!image || !buttons.length) {
         return;
+    }
+
+    function getProductName() {
+        var heading = document.querySelector(".product-copy h1");
+        return heading ? heading.textContent.replace(/\s+/g, " ").trim() : document.title.replace(/\s+\|.+$/, "").trim();
+    }
+
+    function getActiveButton() {
+        for (var i = 0; i < buttons.length; i += 1) {
+            if (buttons[i].classList.contains("is-active")) {
+                return buttons[i];
+            }
+        }
+        return buttons[0];
+    }
+
+    function getButtonColor(button) {
+        var label = button ? button.querySelector("strong") : null;
+        return label ? label.textContent.replace(/\s+/g, " ").trim() : "";
+    }
+
+    function updateBookingLinks(button) {
+        var selectedButton = button || getActiveButton();
+        var product = getProductName();
+        var variant = selectedButton.getAttribute("data-variant") || "Standard";
+        var color = getButtonColor(selectedButton);
+        var price = selectedButton.getAttribute("data-price") || "";
+        var imageSource = selectedButton.getAttribute("data-image") || "";
+
+        for (var i = 0; i < bookingLinks.length; i += 1) {
+            var params = new URLSearchParams();
+            params.set("product", product);
+            params.set("type", "vehicle");
+            if (variant) params.set("variant", variant);
+            if (color) params.set("color", color);
+            if (price) params.set("vehiclePrice", price);
+            if (imageSource) params.set("image", imageSource);
+            bookingLinks[i].href = "booking.html?" + params.toString();
+        }
     }
 
     function activate(button) {
@@ -150,6 +190,7 @@ function initVariantPreview() {
         button.classList.add("is-active");
         button.setAttribute("aria-pressed", "true");
         image.style.opacity = "0.15";
+        updateBookingLinks(button);
 
         setTimeout(function () {
             image.src = nextImage;
@@ -164,4 +205,11 @@ function initVariantPreview() {
             };
         })(buttons[i]));
     }
+
+    if (!getActiveButton().classList.contains("is-active")) {
+        buttons[0].classList.add("is-active");
+        buttons[0].setAttribute("aria-pressed", "true");
+    }
+
+    updateBookingLinks(getActiveButton());
 }

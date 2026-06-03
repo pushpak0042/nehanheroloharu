@@ -204,6 +204,94 @@ img {
     color: #161a21;
 }
 
+.product-price-panel {
+    margin-top: 16px;
+    display: grid;
+    grid-template-columns: minmax(190px, 0.42fr) minmax(260px, 1fr);
+    gap: 12px;
+    align-items: stretch;
+}
+
+.product-price-summary,
+.product-price-table {
+    border: 1px solid var(--hm-line);
+    border-radius: 10px;
+    background: #fff;
+}
+
+.product-price-summary {
+    padding: 14px;
+}
+
+.product-price-summary span,
+.price-row-head span {
+    display: block;
+    color: #6d7684;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.product-price-summary strong {
+    display: block;
+    margin-top: 7px;
+    color: var(--hm-red);
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 1.8rem;
+    line-height: 1;
+    letter-spacing: 0.02em;
+}
+
+.product-price-summary small,
+.price-note {
+    display: block;
+    margin-top: 8px;
+    color: #697383;
+    font-size: 0.78rem;
+    line-height: 1.45;
+}
+
+.product-price-table {
+    overflow: hidden;
+}
+
+.price-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 12px;
+    align-items: center;
+    padding: 10px 12px;
+    border-bottom: 1px solid #edf1f6;
+}
+
+.price-row:last-child {
+    border-bottom: 0;
+}
+
+.price-row span {
+    color: #222832;
+    font-size: 0.86rem;
+    line-height: 1.35;
+}
+
+.price-row strong {
+    color: #141923;
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 1rem;
+    letter-spacing: 0.03em;
+    white-space: nowrap;
+}
+
+.price-row-head {
+    background: #f6f8fb;
+}
+
+.price-note {
+    grid-column: 1 / -1;
+    margin-top: -4px;
+}
+
 .product-actions {
     margin-top: 16px;
     display: flex;
@@ -296,6 +384,14 @@ img {
     font-size: 0.83rem;
     text-transform: uppercase;
     letter-spacing: 0.05em;
+}
+
+.variant-card-price {
+    color: var(--hm-red);
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 0.9rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
 }
 
 .variant-btn.is-active {
@@ -436,7 +532,17 @@ img {
     }
 
     .product-specs,
+    .product-price-panel,
     .highlights {
         grid-template-columns: 1fr;
+    }
+
+    .price-row {
+        grid-template-columns: 1fr;
+        gap: 4px;
+    }
+
+    .price-row strong {
+        white-space: normal;
     }
 }

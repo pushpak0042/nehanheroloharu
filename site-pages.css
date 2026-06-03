@@ -450,6 +450,17 @@
     color: #d9e0ea;
 }
 
+.account-hero-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.account-logout-btn {
+    cursor: pointer;
+}
+
 .secondary-link {
     display: inline-flex;
     align-items: center;
@@ -487,6 +498,14 @@
     .account-hero {
         align-items: flex-start;
         flex-direction: column;
+    }
+
+    .account-hero-actions {
+        width: 100%;
+    }
+
+    .account-hero-actions .btn {
+        text-align: center;
     }
 }
 

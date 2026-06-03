@@ -254,23 +254,175 @@ $pages = @(
     }
 )
 
-function New-VariantHtml($variants, $hero) {
+$priceCatalog = @{
+    'karizma.html' = [pscustomobject]@{
+        location = 'Gurugram'
+        variants = @(@('Top', 'Rs. 186,771'), @('Combat', 'Rs. 188,384'))
+    }
+    'mavrick 440.html' = [pscustomobject]@{
+        location = 'Gurugram'
+        variants = @(@('Base', 'Rs. 213,207'), @('Mid', 'Rs. 229,237'), @('Top', 'Rs. 239,924'))
+    }
+    'x pluse 210.html' = [pscustomobject]@{
+        location = 'Gurugram'
+        variants = @(@('Base', 'Rs. 166,872'), @('Top', 'Rs. 176,090'))
+    }
+    'x pluse 210 4v.html' = [pscustomobject]@{
+        location = 'Bhiwani'
+        variants = @(@('XPulse 200 4V', 'Rs. 142,547'), @('XPulse 200 4V Pro', 'Rs. 154,531'), @('XPulse 200 4V Pro Dakar Edition', 'Rs. 155,797'))
+    }
+    'xtreme 250r.html' = [pscustomobject]@{
+        location = 'Gurugram'
+        variants = @(, @('Xtreme 250R', 'Rs. 172,651'))
+    }
+    'splendor+.html' = [pscustomobject]@{
+        location = 'Bhiwani'
+        variants = @(@('Splendor+ Drum Brake OBD2B', 'Rs. 74,163'), @('Splendor+ i3S OBD2B', 'Rs. 77,477'), @('Splendor+ Special Edition OBD2B', 'Rs. 77,477'), @('125 Million Edition', 'Rs. 78,860'))
+    }
+    'splendor+ xtech.html' = [pscustomobject]@{
+        location = 'Bhiwani'
+        variants = @(@('Splendor+ XTEC Drum Brake OBD2B', 'Rs. 78,462'), @('Splendor+ XTEC Disc Brake OBD2B', 'Rs. 80,229'), @('Splendor+ XTEC 2.0 Drum Brake OBD2B', 'Rs. 82,099'))
+    }
+    'hf deleux.html' = [pscustomobject]@{
+        location = 'Bhiwani'
+        variants = @(@('HF Deluxe Kick Cast OBD2B', 'Rs. 61,697'), @('HF Deluxe Self Cast OBD2B', 'Rs. 66,031'), @('HF Deluxe All Black OBD2B', 'Rs. 67,225'), @('HF Deluxe i3S Cast OBD2B', 'Rs. 67,995'), @('HF Deluxe Pro', 'Rs. 71,470'))
+    }
+    'hf-deluxe-pro.html' = [pscustomobject]@{
+        location = 'Bhiwani'
+        variants = @(, @('HF Deluxe Pro', 'Rs. 71,470'))
+    }
+    'hf 100.html' = [pscustomobject]@{
+        location = 'Bhiwani'
+        variants = @(, @('HF 100 Drum Kick Cast OBD2B', 'Rs. 57,396'))
+    }
+    'passion.html' = [pscustomobject]@{
+        location = 'Bhiwani'
+        variants = @(@('Passion+ Drum Brake OBD2B', 'Rs. 77,838'), @('125 Million Edition', 'Rs. 79,221'))
+    }
+    'glamour.html' = [pscustomobject]@{
+        location = 'Bhiwani'
+        variants = @(@('Glamour Drum Brake OBD2B', 'Rs. 80,205'), @('Glamour Disc Brake OBD2B', 'Rs. 83,893'))
+    }
+    'glamor xtech.html' = [pscustomobject]@{
+        location = 'Bhiwani'
+        variants = @(@('Glamour X Drum Brake', 'Rs. 86,311'), @('Glamour X Disc Brake', 'Rs. 93,686'))
+    }
+    'super splendor.html' = [pscustomobject]@{
+        location = 'Bhiwani'
+        variants = @(@('Super Splendor XTEC Drum Brake OBD2B', 'Rs. 83,417'), @('Super Splendor XTEC Disc Brake OBD2B', 'Rs. 88,274'))
+    }
+    'xtreme 125.html' = [pscustomobject]@{
+        location = 'Bhiwani'
+        variants = @(@('Xtreme 125R IBS OBD2B', 'Rs. 92,300'), @('Xtreme 125R ABS OBD2B', 'Rs. 96,000'), @('Xtreme 125R ABS Single Seat', 'Rs. 96,000'), @('Xtreme 125R Dual Channel ABS', 'Rs. 108,000'))
+    }
+    'xtreme 125r.html' = [pscustomobject]@{
+        location = 'Bhiwani'
+        variants = @(@('Xtreme 125R IBS OBD2B', 'Rs. 92,300'), @('Xtreme 125R ABS OBD2B', 'Rs. 96,000'), @('Xtreme 125R ABS Single Seat', 'Rs. 96,000'), @('Xtreme 125R Dual Channel ABS', 'Rs. 108,000'))
+    }
+    'xtreme 160.html' = [pscustomobject]@{
+        location = 'Gurugram'
+        variants = @(, @('Xtreme 160R Single Disc', 'Rs. 107,149'))
+    }
+    'xtreme 160 4v.html' = [pscustomobject]@{
+        location = 'Bhiwani'
+        variants = @(@('Xtreme 160R Double Disc OBD2B', 'Rs. 131,182'), @('Xtreme 160R 4V Cruise Control', 'Rs. 134,100'))
+    }
+    'xoom 110.html' = [pscustomobject]@{
+        location = 'Bhiwani'
+        variants = @(@('Xoom VX OBD2B', 'Rs. 76,233'), @('Xoom ZX OBD2B', 'Rs. 82,099'), @('Xoom Combat OBD2B', 'Rs. 82,652'))
+    }
+    'xoom 125.html' = [pscustomobject]@{
+        location = 'Bhiwani'
+        variants = @(@('Xoom 125 VX OBD2B', 'Rs. 85,442'), @('Xoom 125 ZX OBD2B', 'Rs. 93,178'))
+    }
+    'xoom160.html' = [pscustomobject]@{
+        location = 'Gurugram'
+        variants = @(, @('Xoom ZX', 'Rs. 141,315'))
+    }
+    'destini 110.html' = [pscustomobject]@{
+        location = 'Jind'
+        variants = @(@('Destini 110 VX', 'Rs. 74,999'), @('Destini 110 ZX', 'Rs. 84,727'))
+    }
+    'destini 125 .html' = [pscustomobject]@{
+        location = 'Bhiwani'
+        variants = @(@('Destini 125 VX', 'Rs. 78,006'), @('Destini 125 ZX', 'Rs. 87,415'), @('Destini 125 ZX+', 'Rs. 88,087'))
+    }
+    'pleasure 100.html' = [pscustomobject]@{
+        location = 'Bhiwani'
+        variants = @(@('Pleasure+ LX OBD2B', 'Rs. 71,010'), @('Pleasure+ VX OBD2B', 'Rs. 73,124'), @('Pleasure+ XTEC ZX OBD2B', 'Rs. 77,628'))
+    }
+    'vida v1.html' = [pscustomobject]@{
+        location = 'Last recorded Delhi'
+        variants = @(@('VIDA V1 Plus', 'Rs. 119,900'), @('VIDA V1 Pro', 'Rs. 149,900'))
+    }
+}
+
+function Get-PriceValue($price) {
+    $digits = [regex]::Replace([string]$price, '[^\d]', '')
+    if([string]::IsNullOrWhiteSpace($digits)) { return '0' }
+    return $digits
+}
+
+function New-PriceHtml($productName, $priceInfo) {
+    if(-not $priceInfo -or -not $priceInfo.variants -or $priceInfo.variants.Count -eq 0) {
+        return ''
+    }
+
+    $startingPrice = $priceInfo.variants[0][1]
+    $rows = @()
+    foreach($variant in $priceInfo.variants) {
+        $rows += "<div class='price-row'><span>$($variant[0])</span><strong>$($variant[1])</strong></div>"
+    }
+    $rowHtml = $rows -join "`r`n"
+
+    return @"
+                <div class='product-price-panel'>
+                    <div class='product-price-summary'>
+                        <span>Starting Price</span>
+                        <strong>$startingPrice</strong>
+                        <small>Ex-showroom, $($priceInfo.location)</small>
+                    </div>
+                    <div class='product-price-table' aria-label='$productName variant prices'>
+                        <div class='price-row price-row-head'><span>Variant</span><span>Ex-showroom</span></div>
+                        $rowHtml
+                    </div>
+                    <p class='price-note'>Indicative ex-showroom prices. Final showroom quote may include registration, road tax, insurance and accessories.</p>
+                </div>
+"@
+}
+
+function New-VariantHtml($variants, $hero, $priceInfo) {
     $out = @()
+    $defaultVariant = 'Standard'
+    $defaultPrice = '0'
+    $defaultPriceText = ''
+    if($priceInfo -and $priceInfo.variants -and $priceInfo.variants.Count -gt 0) {
+        $defaultVariant = $priceInfo.variants[0][0]
+        $defaultPriceText = $priceInfo.variants[0][1]
+        $defaultPrice = Get-PriceValue -price $defaultPriceText
+    }
+    $index = 0
     foreach($v in $variants) {
         $img = $v[0]
         $label = $v[1]
         if(-not (Test-Path -Path $img)) { continue }
-        $out += "<button class='variant-btn' type='button' data-image='$img' aria-pressed='false'><img src='$img' alt='$label'><strong>$label</strong></button>"
+        $activeClass = if($index -eq 0) { ' is-active' } else { '' }
+        $pressed = if($index -eq 0) { 'true' } else { 'false' }
+        $priceLine = if($defaultPriceText) { "<span class='variant-card-price'>From $defaultPriceText</span>" } else { '' }
+        $out += "<button class='variant-btn$activeClass' type='button' data-image='$img' data-variant='$defaultVariant' data-price='$defaultPrice' aria-pressed='$pressed'><img src='$img' alt='$label'><strong>$label</strong>$priceLine</button>"
+        $index += 1
     }
     if($out.Count -eq 0) {
-        return "<button class='variant-btn is-active' type='button' data-image='$hero' aria-pressed='true'><img src='$hero' alt='Default'><strong>Standard</strong></button>"
+        return "<button class='variant-btn is-active' type='button' data-image='$hero' data-variant='$defaultVariant' data-price='$defaultPrice' aria-pressed='true'><img src='$hero' alt='Default'><strong>Standard</strong></button>"
     }
     return ($out -join "`r`n")
 }
 
 foreach($p in $pages) {
     $hero = if(Test-Path -Path $p.hero) { $p.hero } else { 'nehan hero logo.png' }
-    $variantHtml = New-VariantHtml -variants $p.variants -hero $hero
+    $priceInfo = $priceCatalog[$p.file]
+    $variantHtml = New-VariantHtml -variants $p.variants -hero $hero -priceInfo $priceInfo
+    $priceHtml = New-PriceHtml -productName $p.name -priceInfo $priceInfo
     $bookingProduct = [System.Uri]::EscapeDataString($p.name)
 
     $specHtml = ""
@@ -327,6 +479,8 @@ foreach($p in $pages) {
                 <div class='product-specs'>
                     $specHtml
                 </div>
+
+                $priceHtml
 
                 <div class='product-actions'>
                     <a class='btn-book' href='booking.html?product=$bookingProduct'>Book This Model</a>
