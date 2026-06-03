@@ -44,6 +44,10 @@
         writeJson(BOOKINGS_KEY, bookings);
     }
 
+    function hasEnoughBookingDetails(booking) {
+        return Boolean(booking && booking.id && booking.clientName && (booking.clientMobile || booking.clientEmail));
+    }
+
     async function saveBookingToServer(booking) {
         if (!isHttpPage()) {
             return { saved: false, reason: 'server-not-running' };
@@ -62,12 +66,23 @@
                 signal: controller.signal
             });
 
+            const data = await response.json().catch(() => ({}));
+
+            if (response.status === 409) {
+                return {
+                    saved: false,
+                    conflict: true,
+                    status: response.status,
+                    message: data.message || 'This slot is already booked. Please select another slot.',
+                    data
+                };
+            }
+
             if (!response.ok) {
                 throw new Error(`Excel save failed with status ${response.status}`);
             }
 
-            const data = await response.json();
-            return { saved: Boolean(data.ok), data };
+            return { saved: Boolean(data.ok), status: response.status, data };
         } catch (error) {
             console.warn('Excel booking save unavailable.', error);
             return { saved: false, reason: 'server-error', error };
@@ -97,12 +112,18 @@
             status: booking.status || 'Confirmed'
         };
 
+        const serverResult = await saveBookingToServer(bookingToSave);
+
+        if (serverResult.conflict) {
+            const error = new Error(serverResult.message);
+            error.code = 'SLOT_ALREADY_BOOKED';
+            error.server = serverResult;
+            throw error;
+        }
+
         saveBookingLocally(bookingToSave);
 
-        const [serverResult, cloudResult] = await Promise.all([
-            saveBookingToServer(bookingToSave),
-            saveBookingToCloud(bookingToSave)
-        ]);
+        const cloudResult = await saveBookingToCloud(bookingToSave);
 
         return {
             booking: bookingToSave,
@@ -111,6 +132,51 @@
             server: serverResult,
             cloud: cloudResult
         };
+    }
+
+    async function syncLocalBookingsToServer() {
+        if (!isHttpPage()) {
+            return { synced: 0, skipped: 0, reason: 'server-not-running' };
+        }
+
+        const localBookings = getAllBookings();
+        let synced = 0;
+        let skipped = 0;
+
+        for (const booking of localBookings) {
+            if (!hasEnoughBookingDetails(booking)) {
+                skipped += 1;
+                continue;
+            }
+
+            const result = await saveBookingToServer(booking);
+
+            if (result.saved) {
+                synced += 1;
+            } else {
+                skipped += 1;
+            }
+        }
+
+        return { synced, skipped };
+    }
+
+    async function loadBookedSlots(bookingDate) {
+        if (!isHttpPage() || !bookingDate) return [];
+
+        try {
+            const response = await fetch(`/api/booking-slots?date=${encodeURIComponent(bookingDate)}`);
+
+            if (!response.ok) {
+                throw new Error(`Unable to load booked slots: ${response.status}`);
+            }
+
+            const data = await response.json();
+            return Array.isArray(data.bookedSlots) ? data.bookedSlots : [];
+        } catch (error) {
+            console.warn('Unable to load booked slots from server.', error);
+            return [];
+        }
     }
 
     async function loadServerBookings(user) {
@@ -170,9 +236,15 @@
 
     window.heroBookingStorage = {
         getAllBookings,
+        loadBookedSlots,
         loadServerBookings,
         saveBooking,
         saveBookingLocally,
+        syncLocalBookingsToServer,
         downloadServerWorkbook
     };
+
+    document.addEventListener('DOMContentLoaded', () => {
+        syncLocalBookingsToServer();
+    });
 })();

@@ -1,13 +1,28 @@
 const fs = require('fs/promises');
 const http = require('http');
 const path = require('path');
+const tls = require('tls');
 const { URL } = require('url');
 
 const ROOT_DIR = __dirname;
-const DATA_DIR = path.join(ROOT_DIR, 'data');
+const DATA_DIR = process.env.BOOKING_DATA_DIR
+    ? path.resolve(ROOT_DIR, process.env.BOOKING_DATA_DIR)
+    : path.join(ROOT_DIR, 'data');
 const BOOKINGS_JSON = path.join(DATA_DIR, 'bookings.json');
 const BOOKINGS_XLSX = path.join(DATA_DIR, 'bookings.xlsx');
+const SYNC_CONFIG_FILE = path.join(ROOT_DIR, 'booking-sync-config.json');
+const LEGACY_EMAIL_CONFIG_FILE = path.join(ROOT_DIR, 'booking-email-config.json');
 const PORT = Number(process.env.PORT) || 3000;
+
+const ALL_SLOTS = [
+    '09:00-10:00',
+    '10:00-11:00',
+    '11:00-12:00',
+    '14:00-15:00',
+    '15:00-16:00',
+    '16:00-17:00',
+    '17:00-18:00'
+];
 
 const EXCEL_HEADERS = [
     'Booking ID',
@@ -125,6 +140,31 @@ function filterBookings(bookings, searchParams) {
     });
 }
 
+function isActiveBooking(booking) {
+    const status = cleanText(booking.status).toLowerCase();
+    return status !== 'cancelled' && status !== 'canceled';
+}
+
+function findSlotConflict(bookings, booking) {
+    if (!booking.bookingDate || !booking.bookingSlot) return null;
+
+    return bookings.find((item) => {
+        return item.id !== booking.id &&
+            isActiveBooking(item) &&
+            item.bookingDate === booking.bookingDate &&
+            item.bookingSlot === booking.bookingSlot;
+    }) || null;
+}
+
+function getBookedSlots(bookings, bookingDate) {
+    return new Set(
+        bookings
+            .filter((booking) => isActiveBooking(booking) && booking.bookingDate === bookingDate)
+            .map((booking) => booking.bookingSlot)
+            .filter(Boolean)
+    );
+}
+
 async function loadBookings() {
     try {
         const content = await fs.readFile(BOOKINGS_JSON, 'utf8');
@@ -138,8 +178,10 @@ async function loadBookings() {
 
 async function saveBookings(bookings) {
     await fs.mkdir(DATA_DIR, { recursive: true });
+    const workbook = createWorkbookBuffer(bookings);
     await fs.writeFile(BOOKINGS_JSON, JSON.stringify(bookings, null, 2), 'utf8');
-    await fs.writeFile(BOOKINGS_XLSX, createWorkbookBuffer(bookings));
+    await fs.writeFile(BOOKINGS_XLSX, workbook);
+    return saveDriveWorkbookCopy(workbook);
 }
 
 function upsertBooking(bookings, booking) {
@@ -193,12 +235,40 @@ async function handleCreateBooking(request, response) {
             return;
         }
 
-        const bookings = upsertBooking(await loadBookings(), booking);
-        await saveBookings(bookings);
+        const existingBookings = await loadBookings();
+        const existingBooking = existingBookings.find((item) => item.id === booking.id);
+        const slotConflict = findSlotConflict(existingBookings, booking);
+
+        if (slotConflict) {
+            sendJson(response, 409, {
+                ok: false,
+                code: 'SLOT_ALREADY_BOOKED',
+                message: 'This slot is already booked. Please select another slot.',
+                conflict: {
+                    bookingDate: slotConflict.bookingDate,
+                    bookingSlot: slotConflict.bookingSlot
+                }
+            });
+            return;
+        }
+
+        const bookings = upsertBooking(existingBookings, booking);
+        const driveWorkbookResult = await saveBookings(bookings);
+        const [emailResult, driveSheetResult] = await Promise.all([
+            existingBooking
+                ? Promise.resolve({ sent: false, reason: 'existing-booking' })
+                : sendBookingNotification(booking),
+            syncBookingToDriveSheet(booking)
+        ]);
 
         sendJson(response, 201, {
             ok: true,
             booking,
+            email: emailResult,
+            drive: {
+                workbook: driveWorkbookResult,
+                sheet: driveSheetResult
+            },
             excelFile: 'data/bookings.xlsx'
         });
     } catch (error) {
@@ -208,6 +278,321 @@ async function handleCreateBooking(request, response) {
             message: 'Unable to save booking details.'
         });
     }
+}
+
+async function handleBookingSlots(requestUrl, response) {
+    try {
+        const bookingDate = cleanText(requestUrl.searchParams.get('date'));
+
+        if (!bookingDate) {
+            sendJson(response, 400, {
+                ok: false,
+                message: 'Booking date is required.'
+            });
+            return;
+        }
+
+        const bookedSlots = getBookedSlots(await loadBookings(), bookingDate);
+        const slots = ALL_SLOTS.map((slot) => ({
+            slot,
+            label: formatSlotLabel(slot),
+            booked: bookedSlots.has(slot)
+        }));
+
+        sendJson(response, 200, {
+            ok: true,
+            bookingDate,
+            slots,
+            bookedSlots: slots.filter((slot) => slot.booked).map((slot) => slot.slot)
+        });
+    } catch (error) {
+        console.error('Unable to load booking slots:', error);
+        sendJson(response, 500, { ok: false, message: 'Unable to load booking slots.' });
+    }
+}
+
+function formatSlotLabel(slot) {
+    const [time] = cleanText(slot).split('-');
+    const [hours, minutes] = time.split(':');
+    const hour = parseInt(hours, 10);
+
+    if (!Number.isFinite(hour)) return slot;
+
+    const ampm = hour >= 12 ? 'PM' : 'AM';
+    const displayHour = hour % 12 || 12;
+    return `${displayHour}:${minutes || '00'} ${ampm}`;
+}
+
+async function loadSyncConfig() {
+    const config = {
+        emailEnabled: String(process.env.BOOKING_EMAIL_ENABLED || '').toLowerCase() === 'true',
+        smtpHost: process.env.BOOKING_SMTP_HOST,
+        smtpPort: Number(process.env.BOOKING_SMTP_PORT) || 465,
+        smtpUser: process.env.BOOKING_SMTP_USER,
+        smtpPass: process.env.BOOKING_SMTP_PASS,
+        notifyTo: process.env.BOOKING_NOTIFY_EMAIL,
+        fromName: process.env.BOOKING_FROM_NAME || 'Nehan Hero Bookings',
+        driveWorkbookPath: process.env.BOOKING_DRIVE_XLSX_PATH || '',
+        driveWebhookUrl: process.env.BOOKING_DRIVE_WEBHOOK_URL || '',
+        driveWebhookSecret: process.env.BOOKING_DRIVE_WEBHOOK_SECRET || ''
+    };
+
+    const legacyConfig = await readConfigFile(LEGACY_EMAIL_CONFIG_FILE);
+    const syncConfig = await readConfigFile(SYNC_CONFIG_FILE);
+    const fileConfig = {
+        ...legacyConfig,
+        ...syncConfig
+    };
+
+    if (Object.prototype.hasOwnProperty.call(fileConfig, 'enabled') &&
+        !Object.prototype.hasOwnProperty.call(fileConfig, 'emailEnabled')) {
+        fileConfig.emailEnabled = fileConfig.enabled;
+    }
+
+    return {
+        ...config,
+        ...fileConfig,
+        smtpPort: Number(fileConfig.smtpPort || config.smtpPort) || 465
+    };
+}
+
+async function readConfigFile(filePath) {
+    try {
+        return JSON.parse(await fs.readFile(filePath, 'utf8'));
+    } catch (error) {
+        if (error.code !== 'ENOENT') {
+            console.warn(`Unable to read booking config ${filePath}.`, error);
+        }
+
+        return {};
+    }
+}
+
+function hasEmailConfig(config) {
+    return Boolean(config.emailEnabled && config.smtpHost && config.smtpUser && config.smtpPass && config.notifyTo);
+}
+
+async function sendBookingNotification(booking) {
+    const config = await loadSyncConfig();
+
+    if (!hasEmailConfig(config)) {
+        return { sent: false, reason: 'email-not-configured' };
+    }
+
+    try {
+        await sendSmtpMail(config, buildBookingEmail(config, booking));
+        return { sent: true, to: config.notifyTo };
+    } catch (error) {
+        console.warn('Unable to send booking email notification.', error);
+        return { sent: false, reason: 'send-failed' };
+    }
+}
+
+async function saveDriveWorkbookCopy(workbook) {
+    const config = await loadSyncConfig();
+    const targetPath = cleanText(config.driveWorkbookPath);
+
+    if (!targetPath) {
+        return { synced: false, reason: 'drive-workbook-path-not-configured' };
+    }
+
+    try {
+        const resolvedPath = path.resolve(ROOT_DIR, targetPath);
+        await fs.mkdir(path.dirname(resolvedPath), { recursive: true });
+        await fs.writeFile(resolvedPath, workbook);
+        return { synced: true, path: resolvedPath };
+    } catch (error) {
+        console.warn('Unable to update Google Drive workbook copy.', error);
+        return { synced: false, reason: 'drive-workbook-write-failed' };
+    }
+}
+
+async function syncBookingToDriveSheet(booking) {
+    const config = await loadSyncConfig();
+    const webhookUrl = cleanText(config.driveWebhookUrl);
+
+    if (!webhookUrl) {
+        return { synced: false, reason: 'drive-webhook-not-configured' };
+    }
+
+    if (typeof fetch !== 'function') {
+        return { synced: false, reason: 'fetch-unavailable' };
+    }
+
+    try {
+        const response = await fetch(webhookUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                secret: config.driveWebhookSecret || '',
+                booking,
+                headers: EXCEL_HEADERS,
+                row: bookingToExcelRow(booking)
+            })
+        });
+
+        const body = await response.json().catch(() => ({}));
+
+        if (!response.ok || body.ok === false) {
+            return {
+                synced: false,
+                reason: 'drive-webhook-failed',
+                status: response.status,
+                body
+            };
+        }
+
+        return {
+            synced: true,
+            status: response.status,
+            body
+        };
+    } catch (error) {
+        console.warn('Unable to sync booking to Google Drive sheet.', error);
+        return { synced: false, reason: 'drive-webhook-error' };
+    }
+}
+
+function buildBookingEmail(config, booking) {
+    const subject = `New ${booking.type || 'booking'}: ${booking.service || booking.id}`;
+    const body = [
+        'New booking received',
+        '',
+        `Booking ID: ${booking.id}`,
+        `Product/Service: ${booking.service}`,
+        `Booking Type: ${booking.type}`,
+        `Visit Date: ${booking.bookingDate || 'Not selected'}`,
+        `Time Slot: ${booking.bookingSlot || 'Not selected'}`,
+        '',
+        'Customer Details',
+        `Name: ${booking.clientName}`,
+        `Mobile: ${booking.clientMobile}`,
+        `Email: ${booking.clientEmail}`,
+        `Address: ${booking.clientAddress}`,
+        `City: ${booking.clientCity}`,
+        `PIN Code: ${booking.clientPinCode}`,
+        '',
+        `Status: ${booking.status}`,
+        `Created At: ${formatDateTime(booking.createdAt || booking.date)}`
+    ].join('\r\n');
+
+    return {
+        from: config.smtpUser,
+        fromName: config.fromName,
+        to: config.notifyTo,
+        subject,
+        text: body
+    };
+}
+
+async function sendSmtpMail(config, message) {
+    const socket = tls.connect({
+        host: config.smtpHost,
+        port: Number(config.smtpPort) || 465,
+        servername: config.smtpHost
+    });
+    const smtp = createSmtpSession(socket);
+
+    await smtp.read();
+    await smtp.command(`EHLO ${config.smtpHost}`, [250]);
+    await smtp.command('AUTH LOGIN', [334]);
+    await smtp.command(Buffer.from(config.smtpUser).toString('base64'), [334]);
+    await smtp.command(Buffer.from(config.smtpPass).toString('base64'), [235]);
+    await smtp.command(`MAIL FROM:<${config.smtpUser}>`, [250]);
+    await smtp.command(`RCPT TO:<${message.to}>`, [250, 251]);
+    await smtp.command('DATA', [354]);
+    socket.write(`${formatEmailMessage(message)}\r\n.\r\n`);
+    await smtp.read([250]);
+    await smtp.command('QUIT', [221]);
+    socket.end();
+}
+
+function createSmtpSession(socket) {
+    const completedResponses = [];
+    const waiters = [];
+    let responseLines = [];
+    let buffer = '';
+
+    socket.on('data', (chunk) => {
+        buffer += chunk.toString('utf8');
+        const lines = buffer.split(/\r?\n/);
+        buffer = lines.pop() || '';
+
+        lines.forEach((line) => {
+            if (!line) return;
+            responseLines.push(line);
+
+            if (/^\d{3} /.test(line)) {
+                const response = responseLines.join('\n');
+                responseLines = [];
+
+                if (waiters.length) {
+                    waiters.shift()(response);
+                } else {
+                    completedResponses.push(response);
+                }
+            }
+        });
+    });
+
+    socket.on('error', (error) => {
+        while (waiters.length) waiters.shift()(Promise.reject(error));
+    });
+
+    function read(expectedCodes) {
+        return new Promise((resolve, reject) => {
+            const finish = (response) => {
+                Promise.resolve(response)
+                    .then((text) => {
+                        const code = Number(text.slice(0, 3));
+
+                        if (expectedCodes && !expectedCodes.includes(code)) {
+                            reject(new Error(`SMTP command failed: ${text}`));
+                            return;
+                        }
+
+                        resolve(text);
+                    })
+                    .catch(reject);
+            };
+
+            if (completedResponses.length) {
+                finish(completedResponses.shift());
+            } else {
+                waiters.push(finish);
+            }
+        });
+    }
+
+    return {
+        read,
+        async command(commandText, expectedCodes) {
+            socket.write(`${commandText}\r\n`);
+            return read(expectedCodes);
+        }
+    };
+}
+
+function formatEmailMessage(message) {
+    const fromName = encodeEmailHeader(message.fromName || 'Nehan Hero Bookings');
+    const subject = encodeEmailHeader(message.subject);
+
+    return [
+        `From: "${fromName}" <${message.from}>`,
+        `To: <${message.to}>`,
+        `Subject: ${subject}`,
+        'MIME-Version: 1.0',
+        'Content-Type: text/plain; charset=UTF-8',
+        'Content-Transfer-Encoding: 8bit',
+        '',
+        message.text
+    ].join('\r\n');
+}
+
+function encodeEmailHeader(value) {
+    return cleanText(value).replace(/[\r\n"]/g, ' ');
 }
 
 async function handleListBookings(requestUrl, response) {
@@ -276,6 +661,11 @@ async function handleRequest(request, response) {
 
     if (request.method === 'GET' && requestUrl.pathname === '/api/bookings') {
         await handleListBookings(requestUrl, response);
+        return;
+    }
+
+    if (request.method === 'GET' && requestUrl.pathname === '/api/booking-slots') {
+        await handleBookingSlots(requestUrl, response);
         return;
     }
 

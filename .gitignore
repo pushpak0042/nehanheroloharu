@@ -10,6 +10,8 @@ desktop.ini
 # Temp
 .tmp/
 data/
+booking-email-config.json
+booking-sync-config.json
 *.log
 
 # Large video files (exceed GitHub 100MB limit)

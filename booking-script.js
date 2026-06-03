@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     if (!auth.isLoggedIn()) {
         localStorage.setItem('redirectAfterLogin', 'booking.html' + window.location.search);
         document.querySelector('.booking-container')?.classList.add('is-locked');
@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
-    initializeBookingPage();
+    await initializeBookingPage();
 });
 
 let bookingData = {
@@ -41,7 +41,7 @@ function getField(selector, fallbackSelector) {
     return document.querySelector(selector) || (fallbackSelector ? document.querySelector(fallbackSelector) : null);
 }
 
-function initializeBookingPage() {
+async function initializeBookingPage() {
     const urlParams = new URLSearchParams(window.location.search);
 
     bookingData.serviceType = urlParams.get('type') || 'vehicle';
@@ -58,6 +58,8 @@ function initializeBookingPage() {
     const user = auth.getCurrentUser();
     prefillUserDetails(user);
     renderBookingSummary();
+    await window.heroBookingStorage?.syncLocalBookingsToServer();
+    await window.heroBookingStorage?.loadServerBookings(user);
     setupBookingSlots();
     setupPaymentMethods();
     setupConfirmButton();
@@ -107,20 +109,44 @@ function setupBookingSlots() {
 
     bookingDateInput.setAttribute('min', minDate);
     bookingDateInput.setAttribute('max', maxDate.toISOString().split('T')[0]);
-    bookingDateInput.addEventListener('change', loadAvailableSlots);
+    bookingDateInput.addEventListener('change', () => {
+        const slotInput = document.getElementById('booking-slot');
+        if (slotInput) slotInput.value = '';
+        loadAvailableSlots();
+    });
 }
 
-function loadAvailableSlots() {
+function getLocalBookedSlots(selectedDate) {
+    const bookings = window.heroBookingStorage?.getAllBookings?.() ||
+        JSON.parse(localStorage.getItem('bookings') || '[]');
+
+    return bookings
+        .filter((booking) => {
+            const status = String(booking.status || '').toLowerCase();
+            return booking.bookingDate === selectedDate && status !== 'cancelled' && status !== 'canceled';
+        })
+        .map((booking) => booking.bookingSlot)
+        .filter(Boolean);
+}
+
+async function getBookedSlots(selectedDate) {
+    const localBookedSlots = getLocalBookedSlots(selectedDate);
+    const serverBookedSlots = window.heroBookingStorage
+        ? await window.heroBookingStorage.loadBookedSlots(selectedDate)
+        : [];
+
+    return Array.from(new Set([...localBookedSlots, ...serverBookedSlots]));
+}
+
+async function loadAvailableSlots() {
     const bookingDateInput = document.getElementById('booking-date');
     const slotContainer = document.getElementById('available-slots');
     const selectedDate = bookingDateInput?.value;
 
     if (!slotContainer || !selectedDate) return;
 
-    const bookings = JSON.parse(localStorage.getItem('bookings') || '[]');
-    const bookedSlots = bookings
-        .filter((booking) => booking.bookingDate === selectedDate)
-        .map((booking) => booking.bookingSlot);
+    slotContainer.innerHTML = '<p>Checking available slots...</p>';
+    const bookedSlots = await getBookedSlots(selectedDate);
 
     const allSlots = [
         '09:00-10:00',
@@ -139,13 +165,14 @@ function loadAvailableSlots() {
                 ${allSlots.map((slot) => {
                     const isBooked = bookedSlots.includes(slot);
                     return `
-                        <div class="slot-option ${isBooked ? 'booked' : 'available'}"
+                        <button type="button"
+                             class="slot-option ${isBooked ? 'booked' : 'available'}"
                              data-slot="${slot}"
                              onclick="selectSlot('${slot}', this)"
-                             style="cursor: ${isBooked ? 'not-allowed' : 'pointer'}; opacity: ${isBooked ? 0.5 : 1};">
+                             ${isBooked ? 'disabled aria-disabled="true"' : ''}>
                             <span>${formatSlotTime(slot.split('-')[0])}</span>
                             <small>${isBooked ? 'Booked' : 'Available'}</small>
-                        </div>
+                        </button>
                     `;
                 }).join('')}
             </div>
@@ -162,9 +189,8 @@ function formatSlotTime(time) {
 }
 
 window.selectSlot = function selectSlot(slot, element) {
-    const bookings = JSON.parse(localStorage.getItem('bookings') || '[]');
     const selectedDate = document.getElementById('booking-date')?.value;
-    const isBooked = bookings.some((booking) => booking.bookingDate === selectedDate && booking.bookingSlot === slot);
+    const isBooked = element.disabled || getLocalBookedSlots(selectedDate).includes(slot);
 
     if (isBooked) {
         alert('This slot is already booked. Please select another slot.');
@@ -233,7 +259,14 @@ function setupConfirmButton() {
             showBookingSuccess(booking, saveResult);
         } catch (error) {
             console.error('Unable to save booking.', error);
-            alert('Unable to save the booking. Please try again.');
+            alert(error.code === 'SLOT_ALREADY_BOOKED'
+                ? error.message
+                : 'Unable to save the booking. Please try again.');
+            if (error.code === 'SLOT_ALREADY_BOOKED') {
+                const slotInput = document.getElementById('booking-slot');
+                if (slotInput) slotInput.value = '';
+                await loadAvailableSlots();
+            }
             payButton.disabled = false;
             renderBookingSummary();
         }

@@ -154,6 +154,7 @@ async function hydrateBookingsFromCloud(user) {
     }
 
     if (window.heroBookingStorage) {
+        await window.heroBookingStorage.syncLocalBookingsToServer();
         await window.heroBookingStorage.loadServerBookings(user);
     }
 }

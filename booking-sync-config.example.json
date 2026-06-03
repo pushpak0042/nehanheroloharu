@@ -1,0 +1,13 @@
+{
+  "emailEnabled": false,
+  "smtpHost": "smtp.gmail.com",
+  "smtpPort": 465,
+  "smtpUser": "newaymketg@gmail.com",
+  "smtpPass": "your-gmail-app-password",
+  "notifyTo": "newaymketg@gmail.com",
+  "fromName": "Nehan Hero Bookings",
+  "driveWorkbookPath": "",
+  "driveWebhookUrl": "",
+  "driveWebhookSecret": "change-this-secret",
+  "googleSheetUrl": "https://docs.google.com/spreadsheets/d/10bYsTuZINTH92yzFqS046qGAscNFVp9EYFNDPWfF1yo/edit"
+}
