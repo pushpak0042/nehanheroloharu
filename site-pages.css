@@ -407,6 +407,24 @@
     margin-right: 0;
 }
 
+.map-section {
+    margin-top: clamp(28px, 5vw, 48px);
+}
+
+.map-frame {
+    overflow: hidden;
+    border: 1px solid var(--page-line);
+    border-radius: 8px;
+    background: #ffffff;
+    box-shadow: 0 12px 28px rgba(16, 24, 40, 0.08);
+}
+
+.map-frame iframe {
+    display: block;
+    width: 100%;
+    min-height: clamp(320px, 52vw, 520px);
+}
+
 .account-page {
     background: var(--page-soft);
 }
