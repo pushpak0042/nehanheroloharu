@@ -145,12 +145,16 @@ function initializeProfileSettings(user) {
 }
 
 async function hydrateBookingsFromCloud(user) {
-    if (!window.heroCloud) return;
+    if (window.heroCloud) {
+        try {
+            await window.heroCloud.loadBookings(user.id);
+        } catch (error) {
+            console.warn('Unable to load cloud bookings.', error);
+        }
+    }
 
-    try {
-        await window.heroCloud.loadBookings(user.id);
-    } catch (error) {
-        console.warn('Unable to load cloud bookings.', error);
+    if (window.heroBookingStorage) {
+        await window.heroBookingStorage.loadServerBookings(user);
     }
 }
 
@@ -189,12 +193,16 @@ async function addBooking(bookingData, user = auth.getCurrentUser()) {
         ...bookingData
     };
 
-    saveBookingLocally(booking);
+    if (window.heroBookingStorage) {
+        await window.heroBookingStorage.saveBooking(booking);
+    } else {
+        saveBookingLocally(booking);
 
-    try {
-        await window.heroCloud?.saveBooking(booking);
-    } catch (error) {
-        console.warn('Unable to save booking to cloud.', error);
+        try {
+            await window.heroCloud?.saveBooking(booking);
+        } catch (error) {
+            console.warn('Unable to save booking to cloud.', error);
+        }
     }
 
     return booking;
@@ -449,7 +457,13 @@ function csvValue(value) {
     return `"${String(value ?? 'N/A').replace(/"/g, '""')}"`;
 }
 
-function exportBookingsToExcel() {
+async function exportBookingsToExcel() {
+    const user = auth.getCurrentUser();
+
+    if (window.heroBookingStorage && await window.heroBookingStorage.downloadServerWorkbook(user)) {
+        return;
+    }
+
     const bookings = getBookings();
 
     if (bookings.length === 0) {

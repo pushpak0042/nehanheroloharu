@@ -53,8 +53,8 @@ document.addEventListener('DOMContentLoaded', () => {
         payButton.textContent = 'Saving Booking...';
 
         try {
-            await savePaymentBooking(booking);
-            showPaymentSuccess(productName, booking.id);
+            const saveResult = await savePaymentBooking(booking);
+            showPaymentSuccess(productName, booking.id, saveResult);
         } catch (error) {
             console.error('Unable to save booking.', error);
             alert('Unable to save booking details. Please try again.');
@@ -91,16 +91,40 @@ function buildPaymentBooking(productName, totalPrice, serviceType, basePrice, us
 }
 
 async function savePaymentBooking(booking) {
+    if (window.heroBookingStorage) {
+        return window.heroBookingStorage.saveBooking(booking);
+    }
+
     const bookings = JSON.parse(localStorage.getItem('bookings') || '[]').filter((item) => item.id !== booking.id);
     bookings.unshift(booking);
     localStorage.setItem('bookings', JSON.stringify(bookings));
 
-    if (window.heroCloud) {
-        await window.heroCloud.saveBooking(booking);
+    let cloudSaved = false;
+    try {
+        if (window.heroCloud) {
+            await window.heroCloud.saveBooking(booking);
+            cloudSaved = window.heroCloud.getStatus?.().mode === 'cloud';
+        }
+    } catch (error) {
+        console.warn('Unable to save booking to cloud.', error);
     }
+
+    return { booking, excelSaved: false, cloudSaved };
 }
 
-function showPaymentSuccess(productName, bookingId) {
+function getPaymentSaveMessage(saveResult) {
+    if (saveResult?.excelSaved) {
+        return 'Your booking details have been saved to your account and the showroom Excel workbook.';
+    }
+
+    if (window.location.protocol === 'file:') {
+        return 'Your booking is saved in this browser. Run the booking server to save it automatically in Excel.';
+    }
+
+    return 'Your booking details have been saved to your account. Excel storage is currently unavailable.';
+}
+
+function showPaymentSuccess(productName, bookingId, saveResult = {}) {
     const successHTML = `
         <div class="payment-success-modal">
             <div class="success-content">
@@ -111,7 +135,7 @@ function showPaymentSuccess(productName, bookingId) {
                     <p><strong>Booking ID:</strong> ${bookingId}</p>
                     <p><strong>Date:</strong> ${new Date().toLocaleDateString('en-IN')}</p>
                 </div>
-                <p class="success-message">Your booking details have been saved to your account${window.heroCloud?.getStatus().mode === 'cloud' ? ' and cloud database' : ''}.</p>
+                <p class="success-message">${getPaymentSaveMessage(saveResult)}</p>
                 <div class="success-actions">
                     <button onclick="window.location.href='index.html'" class="success-btn">Back to Home</button>
                     <button onclick="window.location.href='account.html'" class="success-btn secondary">View My Bookings</button>
