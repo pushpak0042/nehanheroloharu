@@ -1,26 +1,176 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const serviceCards = document.querySelectorAll('.service-action-card');
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Service And Care | Nehan Hero</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Sora:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="home-hero.css">
+    <link rel="stylesheet" href="auth-system.css">
+    <link rel="stylesheet" href="site-pages.css">
+</head>
+<body>
+    <header class="site-header">
+        <div class="top-strip">
+            <p>Service And Care</p>
+            <div class="top-strip-links">
+                <a href="explore.html">Explore</a>
+                <a href="booking.html">Book Online</a>
+                <a href="contact.html">Contact</a>
+            </div>
+        </div>
 
-    serviceCards.forEach((card) => {
-        card.addEventListener('click', () => {
-            const serviceName = card.getAttribute('data-service') || card.querySelector('strong')?.textContent || 'Hero Service';
-            redirectToServiceBooking(serviceName);
-        });
-    });
-});
+        <div class="nav-row">
+            <a href="index.html" class="brand" aria-label="Nehan Hero Home">
+                <img src="nehan hero logo.png" alt="Nehan Hero">
+            </a>
 
-function redirectToServiceBooking(serviceName) {
-    const params = new URLSearchParams({
-        product: serviceName,
-        type: 'service'
-    });
-    const bookingUrl = `booking.html?${params.toString()}`;
+            <button class="menu-toggle" id="menuToggle" aria-expanded="false" aria-controls="mainNav" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
 
-    if (typeof auth !== 'undefined' && !auth.isLoggedIn()) {
-        localStorage.setItem('redirectAfterLogin', bookingUrl);
-        showLoginModal();
-        return;
-    }
+            <nav class="main-nav" id="mainNav">
+                <ul class="nav-list">
+                    <li class="mobile-menu-home"><a href="index.html">Home</a></li>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="explore.html">Explore</a></li>
+                    <li><a href="service.html">Service</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="account.html">My Account</a></li>
+                </ul>
+                <div class="nav-actions">
+                    <a href="booking.html?type=service&product=General%20Service" class="btn btn-primary">Book Service</a>
+                    <a href="account.html" class="btn btn-ghost btn-account">My Account</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+    <div class="menu-backdrop" id="menuBackdrop" hidden></div>
 
-    window.location.href = bookingUrl;
-}
+    <main class="subpage-main">
+        <section class="page-hero service-page-hero">
+            <div class="page-hero-copy">
+                <p class="subpage-eyebrow">Authorized Care</p>
+                <h1>Book Hero Service With Confidence</h1>
+                <p>Schedule periodic maintenance, repair support, genuine parts help and warranty guidance at Nehan Hero Loharu.</p>
+                <div class="hero-cta-row">
+                    <a href="#book-service" class="btn btn-primary">Choose Service</a>
+                    <a href="contact.html" class="btn btn-ghost-light">Call Support</a>
+                </div>
+                <div class="hero-stat-row">
+                    <span><strong>7</strong> Daily slots</span>
+                    <span><strong>30</strong> Day booking window</span>
+                    <span><strong>Rs. 0</strong> Pay today</span>
+                </div>
+            </div>
+            <div class="page-hero-media">
+                <img src="serviceand care.jpeg" alt="Hero service and care">
+            </div>
+        </section>
+
+        <section class="catalog-section" id="book-service">
+            <div class="section-head compact">
+                <p class="subpage-eyebrow">Book Online</p>
+                <h2>Choose Your Service Type</h2>
+            </div>
+            <div class="service-action-grid">
+                <article class="service-action-card" data-service="Periodic Maintenance Service">
+                    <span class="service-icon">01</span>
+                    <h3>Periodic Maintenance</h3>
+                    <p>Scheduled check-up, oil inspection, chain care, brake check and general tune-up.</p>
+                    <span class="card-action">Book Slot</span>
+                </article>
+                <article class="service-action-card" data-service="Repair And Diagnosis">
+                    <span class="service-icon">02</span>
+                    <h3>Repair And Diagnosis</h3>
+                    <p>Noise, starting, battery, electrical, braking or performance inspection by the service team.</p>
+                    <span class="card-action">Book Slot</span>
+                </article>
+                <article class="service-action-card" data-service="Genuine Parts Support">
+                    <span class="service-icon">03</span>
+                    <h3>Genuine Parts</h3>
+                    <p>Request availability for Hero genuine parts, accessories and fitment support.</p>
+                    <span class="card-action">Book Slot</span>
+                </article>
+                <article class="service-action-card" data-service="Warranty And Insurance Help">
+                    <span class="service-icon">04</span>
+                    <h3>Warranty Help</h3>
+                    <p>Get support for warranty queries, service records and insurance claim guidance.</p>
+                    <span class="card-action">Book Slot</span>
+                </article>
+            </div>
+        </section>
+
+        <section class="care-steps-section is-soft">
+            <div class="section-head compact">
+                <p class="subpage-eyebrow">Process</p>
+                <h2>Simple Service Flow</h2>
+            </div>
+            <div class="process-grid">
+                <article>
+                    <span>1</span>
+                    <h3>Select Date</h3>
+                    <p>Pick a preferred visit date from tomorrow onward.</p>
+                </article>
+                <article>
+                    <span>2</span>
+                    <h3>Choose Slot</h3>
+                    <p>Reserve an available showroom service time.</p>
+                </article>
+                <article>
+                    <span>3</span>
+                    <h3>Visit Workshop</h3>
+                    <p>Bring the vehicle and booking ID for faster intake.</p>
+                </article>
+            </div>
+        </section>
+
+        <section class="split-band">
+            <div>
+                <p class="subpage-eyebrow">Support</p>
+                <h2>Need A Quick Answer Before Booking?</h2>
+                <p>Reach the Loharu team for slot timing, parts availability, warranty details and service record questions.</p>
+                <a href="contact.html" class="btn btn-primary">Contact Workshop</a>
+            </div>
+            <img src="iamge for footer section.jpeg" alt="Nehan Hero showroom support">
+        </section>
+    </main>
+
+    <footer class="site-footer" id="footer-links">
+        <div class="footer-grid">
+            <div>
+                <h4>Nehan Hero</h4>
+                <p>Loharu, Bhiwani, Haryana - 127201</p>
+            </div>
+            <div>
+                <h4>Service</h4>
+                <a href="#book-service">Book Service</a>
+                <a href="booking.html?type=service&product=Periodic%20Maintenance%20Service">Periodic Maintenance</a>
+                <a href="contact.html">Workshop Support</a>
+            </div>
+            <div>
+                <h4>Explore</h4>
+                <a href="explore.html">Vehicles</a>
+                <a href="booking.html">Book Online</a>
+                <a href="account.html">My Account</a>
+            </div>
+            <div>
+                <h4>Contact</h4>
+                <p>Phone: +91 7015139162</p>
+                <p>Email: info@heromotocorp.com</p>
+            </div>
+        </div>
+        <p class="footer-note">&copy; 2026 Nehan Hero Loharu. All rights reserved.</p>
+    </footer>
+
+    <script src="cloud-config.js"></script>
+    <script src="cloud-sync.js"></script>
+    <script src="auth-system.js"></script>
+    <script src="home-hero.js"></script>
+    <script src="service-script.js"></script>
+</body>
+</html>

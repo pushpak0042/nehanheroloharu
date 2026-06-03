@@ -1,0 +1,494 @@
+:root {
+    --page-red: #e11921;
+    --page-ink: #111318;
+    --page-muted: #5d6674;
+    --page-line: #dfe4eb;
+    --page-soft: #f4f6f9;
+}
+
+.subpage-main {
+    background: #ffffff;
+}
+
+.page-hero {
+    min-height: calc(100vh - 114px);
+    padding: clamp(42px, 7vw, 84px) clamp(16px, 5vw, 64px);
+    display: grid;
+    grid-template-columns: minmax(280px, 0.92fr) minmax(260px, 1.08fr);
+    gap: clamp(24px, 5vw, 56px);
+    align-items: center;
+    background: linear-gradient(112deg, #111318 0%, #1c2531 52%, #f2f4f7 52%, #ffffff 100%);
+    color: #ffffff;
+}
+
+.page-hero-copy {
+    max-width: 680px;
+}
+
+.subpage-eyebrow {
+    margin-bottom: 10px;
+    color: var(--page-red);
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 0.9rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.page-hero h1,
+.catalog-section h2,
+.split-band h2,
+.cta-panel h2,
+.page-form h2,
+.account-hero h1 {
+    font-family: "Barlow Condensed", sans-serif;
+    font-weight: 800;
+    line-height: 0.98;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+}
+
+.page-hero h1 {
+    max-width: 720px;
+    margin-bottom: 16px;
+    font-size: clamp(3rem, 7vw, 5.8rem);
+}
+
+.page-hero p {
+    max-width: 62ch;
+    color: #d9e0ea;
+    font-size: 1rem;
+}
+
+.page-hero-media {
+    justify-self: center;
+    width: min(100%, 720px);
+}
+
+.page-hero-media img {
+    width: 100%;
+    max-height: 520px;
+    object-fit: contain;
+    filter: drop-shadow(0 22px 38px rgba(0, 0, 0, 0.24));
+}
+
+.hero-stat-row {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    margin-top: 28px;
+}
+
+.hero-stat-row span {
+    min-height: 76px;
+    padding: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.08);
+    color: #e6ecf4;
+    font-size: 0.82rem;
+}
+
+.hero-stat-row strong {
+    display: block;
+    color: #ffffff;
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 1.7rem;
+    line-height: 1;
+}
+
+.quick-category-band {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 14px clamp(16px, 4vw, 56px);
+    background: #ffffff;
+    border-bottom: 1px solid var(--page-line);
+}
+
+.quick-category-band a {
+    padding: 9px 14px;
+    border: 1px solid var(--page-line);
+    border-radius: 999px;
+    color: var(--page-ink);
+    font-family: "Barlow Condensed", sans-serif;
+    font-weight: 800;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+}
+
+.quick-category-band a:hover {
+    border-color: var(--page-red);
+    color: var(--page-red);
+}
+
+.catalog-section,
+.care-steps-section,
+.contact-layout-section {
+    padding: clamp(54px, 8vw, 88px) clamp(16px, 5vw, 64px);
+}
+
+.catalog-section.is-soft,
+.care-steps-section.is-soft {
+    background: var(--page-soft);
+}
+
+.section-head.compact {
+    margin-bottom: 24px;
+}
+
+.section-head.compact h2,
+.catalog-section h2,
+.split-band h2,
+.cta-panel h2,
+.page-form h2 {
+    color: var(--page-ink);
+    font-size: clamp(2.2rem, 4.5vw, 4rem);
+}
+
+.catalog-grid,
+.service-action-grid,
+.process-grid,
+.contact-info-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.catalog-card,
+.service-action-card,
+.process-grid article,
+.contact-info-grid article,
+.visit-card {
+    border: 1px solid var(--page-line);
+    border-radius: 8px;
+    background: #ffffff;
+    box-shadow: 0 12px 28px rgba(16, 24, 40, 0.08);
+}
+
+.catalog-card {
+    overflow: hidden;
+}
+
+.catalog-card img {
+    width: 100%;
+    height: 190px;
+    object-fit: contain;
+    padding: 14px;
+    background: #f7f9fc;
+}
+
+.catalog-card h3,
+.service-action-card h3,
+.process-grid h3,
+.contact-info-grid h3,
+.visit-card h3 {
+    margin: 16px 16px 6px;
+    color: var(--page-ink);
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 1.35rem;
+    line-height: 1.05;
+    text-transform: uppercase;
+}
+
+.catalog-card p,
+.service-action-card p,
+.process-grid p,
+.contact-info-grid p,
+.split-band p,
+.cta-panel p,
+.visit-card p {
+    color: var(--page-muted);
+}
+
+.catalog-card p {
+    min-height: 64px;
+    margin: 0 16px;
+    font-size: 0.92rem;
+}
+
+.catalog-card a,
+.card-action {
+    display: inline-flex;
+    margin: 14px 16px 16px;
+    color: var(--page-red);
+    font-family: "Barlow Condensed", sans-serif;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.split-band {
+    padding: clamp(44px, 7vw, 74px) clamp(16px, 5vw, 64px);
+    display: grid;
+    grid-template-columns: minmax(260px, 0.95fr) minmax(260px, 1.05fr);
+    gap: 24px;
+    align-items: center;
+    background: #111318;
+    color: #ffffff;
+}
+
+.split-band h2 {
+    color: #ffffff;
+}
+
+.split-band p {
+    max-width: 58ch;
+    margin: 12px 0 20px;
+    color: #d9e0ea;
+}
+
+.split-band img {
+    width: 100%;
+    max-height: 360px;
+    object-fit: contain;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.07);
+    padding: 18px;
+}
+
+.cta-panel {
+    padding: clamp(48px, 8vw, 80px) clamp(16px, 5vw, 64px);
+    text-align: center;
+    background: #ffffff;
+}
+
+.cta-panel p {
+    max-width: 680px;
+    margin: 10px auto 18px;
+}
+
+.hero-cta-row.center {
+    justify-content: center;
+}
+
+.service-action-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.service-action-card {
+    padding: 22px;
+    cursor: pointer;
+    transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.service-action-card:hover,
+.service-action-card:focus {
+    transform: translateY(-4px);
+    border-color: var(--page-red);
+    box-shadow: 0 18px 36px rgba(16, 24, 40, 0.12);
+    outline: none;
+}
+
+.service-action-card h3,
+.service-action-card p {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.service-icon,
+.process-grid span,
+.contact-info-grid span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 42px;
+    height: 42px;
+    padding: 0 10px;
+    border-radius: 999px;
+    background: var(--page-red);
+    color: #ffffff;
+    font-family: "Barlow Condensed", sans-serif;
+    font-weight: 800;
+}
+
+.process-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.process-grid article,
+.contact-info-grid article {
+    padding: 22px;
+}
+
+.process-grid h3,
+.process-grid p,
+.contact-info-grid h3,
+.contact-info-grid p {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.contact-info-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    margin-bottom: 20px;
+}
+
+.contact-panel {
+    display: grid;
+    grid-template-columns: minmax(280px, 1fr) minmax(240px, 0.42fr);
+    gap: 20px;
+    align-items: start;
+}
+
+.page-form {
+    border: 1px solid var(--page-line);
+    border-radius: 8px;
+    background: #ffffff;
+    padding: clamp(20px, 4vw, 32px);
+    box-shadow: 0 12px 28px rgba(16, 24, 40, 0.08);
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.page-form .form-group {
+    margin-bottom: 16px;
+}
+
+.page-form label {
+    display: block;
+    margin-bottom: 7px;
+    color: var(--page-ink);
+    font-size: 0.88rem;
+    font-weight: 700;
+}
+
+.page-form input,
+.page-form select,
+.page-form textarea {
+    width: 100%;
+    border: 1px solid #cfd6e1;
+    border-radius: 8px;
+    padding: 12px 13px;
+    font: inherit;
+}
+
+.page-form input:focus,
+.page-form select:focus,
+.page-form textarea:focus {
+    border-color: var(--page-red);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(225, 25, 33, 0.12);
+}
+
+.form-submit {
+    cursor: pointer;
+}
+
+.form-status {
+    min-height: 22px;
+    margin-top: 12px;
+    color: #1b7f45;
+    font-weight: 700;
+}
+
+.visit-card {
+    padding: 22px;
+}
+
+.visit-card img {
+    width: 82px;
+    height: 82px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.visit-card h3,
+.visit-card p {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.account-page {
+    background: var(--page-soft);
+}
+
+.account-hero {
+    padding: clamp(36px, 6vw, 62px) clamp(16px, 5vw, 64px);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    background: #111318;
+    color: #ffffff;
+}
+
+.account-hero h1 {
+    margin-bottom: 8px;
+    color: #ffffff;
+    font-size: clamp(2.4rem, 6vw, 4.8rem);
+}
+
+.account-hero p {
+    max-width: 620px;
+    color: #d9e0ea;
+}
+
+.secondary-link {
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+}
+
+@media (max-width: 1180px) {
+    .catalog-grid,
+    .service-action-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 900px) {
+    .page-hero,
+    .split-band,
+    .contact-panel {
+        grid-template-columns: 1fr;
+    }
+
+    .page-hero {
+        min-height: auto;
+        background: linear-gradient(180deg, #111318 0%, #1c2531 58%, #f5f7fa 58%, #ffffff 100%);
+    }
+
+    .hero-stat-row,
+    .catalog-grid,
+    .service-action-grid,
+    .process-grid,
+    .contact-info-grid,
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .account-hero {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 640px) {
+    .page-hero {
+        padding-top: 34px;
+    }
+
+    .page-hero h1 {
+        font-size: 2.75rem;
+    }
+
+    .quick-category-band {
+        position: static;
+        justify-content: flex-start;
+        overflow-x: auto;
+        flex-wrap: nowrap;
+    }
+
+    .quick-category-band a {
+        white-space: nowrap;
+    }
+}

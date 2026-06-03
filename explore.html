@@ -1,118 +1,269 @@
-* { margin: 0; padding: 0; box-sizing: border-box; }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explore Hero Range | Nehan Hero</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Sora:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="home-hero.css">
+    <link rel="stylesheet" href="auth-system.css">
+    <link rel="stylesheet" href="site-pages.css">
+</head>
+<body>
+    <header class="site-header">
+        <div class="top-strip">
+            <p>Nehan Hero Loharu</p>
+            <div class="top-strip-links">
+                <a href="service.html">Service</a>
+                <a href="booking.html">Book Online</a>
+                <a href="contact.html">Contact</a>
+            </div>
+        </div>
 
-body {
-    /* Using the requested background image and dark theme */
-    background: #e5dede url('karizma black.jpg') no-repeat center center fixed;
-    background-size: cover;
-    color: #fff;
-    font-family: 'Inter', sans-serif;
-}
+        <div class="nav-row">
+            <a href="index.html" class="brand" aria-label="Nehan Hero Home">
+                <img src="nehan hero logo.png" alt="Nehan Hero">
+            </a>
 
-/* Sub-Navbar / Header Layout */
-.sub-navbar {
-    position: sticky;
-    top: 0;
-    width: 100%;
-    background: rgba(0, 0, 0, 0.95); /* Dark overlay to keep text readable */
-    backdrop-filter: blur(10px);
-    border-bottom: 2px solid #ed1c24; /* Red accent */
-    padding: 15px 5%;
-    z-index: 1000;
-}
+            <button class="menu-toggle" id="menuToggle" aria-expanded="false" aria-controls="mainNav" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
 
-.sub-nav-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
+            <nav class="main-nav" id="mainNav">
+                <ul class="nav-list">
+                    <li class="mobile-menu-home"><a href="index.html">Home</a></li>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="explore.html">Explore</a></li>
+                    <li><a href="service.html">Service</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="account.html">My Account</a></li>
+                </ul>
+                <div class="nav-actions">
+                    <a href="booking.html" class="btn btn-primary">Book Now</a>
+                    <a href="account.html" class="btn btn-ghost btn-account">My Account</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+    <div class="menu-backdrop" id="menuBackdrop" hidden></div>
 
-/* Top Left: Splendor+ */
-.model-name {
-    font-size: 2rem;
-    font-weight: 900;
-    text-transform: uppercase;
-    color: #fff;
-    letter-spacing: 2px;
-}
+    <main class="subpage-main">
+        <section class="page-hero explore-hero">
+            <div class="page-hero-copy">
+                <p class="subpage-eyebrow">Explore Range</p>
+                <h1>Find Your Next Hero</h1>
+                <p>Compare commuter motorcycles, premium rides, scooters and VIDA electric options available through Nehan Hero Loharu.</p>
+                <div class="hero-cta-row">
+                    <a href="#motorcycles" class="btn btn-primary">Motorcycles</a>
+                    <a href="#scooters" class="btn btn-ghost-light">Scooters</a>
+                </div>
+                <div class="hero-stat-row">
+                    <span><strong>30+</strong> Models</span>
+                    <span><strong>4</strong> Categories</span>
+                    <span><strong>0</strong> Online payment required</span>
+                </div>
+            </div>
+            <div class="page-hero-media">
+                <img src="karizma red.png" alt="Karizma XMR motorcycle">
+            </div>
+        </section>
 
-/* Top Right: Price and Ex-showroom */
-.price-container {
-    display: flex;
-    flex-direction: column;
-    text-align: right;
-}
+        <section class="quick-category-band" aria-label="Vehicle categories">
+            <a href="#premium">Premium</a>
+            <a href="#motorcycles">Motorcycles</a>
+            <a href="#scooters">Scooters</a>
+            <a href="#electric">Electric</a>
+        </section>
 
-.price-tag {
-    color: #ed1c24;
-    font-size: 1.6rem;
-    font-weight: 900;
-}
+        <section class="catalog-section" id="premium">
+            <div class="section-head compact">
+                <p class="subpage-eyebrow">Hero Premia</p>
+                <h2>Premium Motorcycles And Scooters</h2>
+            </div>
+            <div class="catalog-grid">
+                <article class="catalog-card">
+                    <img src="karizma yellow.png" alt="Karizma XMR">
+                    <h3>Karizma XMR</h3>
+                    <p>Sport touring performance with aggressive styling.</p>
+                    <a href="karizma.html">View Model</a>
+                </article>
+                <article class="catalog-card">
+                    <img src="mavrick top black.png" alt="Mavrick 440">
+                    <h3>Mavrick 440</h3>
+                    <p>Premium roadster presence with relaxed power.</p>
+                    <a href="mavrick 440.html">View Model</a>
+                </article>
+                <article class="catalog-card">
+                    <img src="xpulse 210 main pic.webp" alt="Xpulse 210">
+                    <h3>Xpulse 210</h3>
+                    <p>Adventure-ready stance for city and trail routes.</p>
+                    <a href="x pluse 210.html">View Model</a>
+                </article>
+                <article class="catalog-card">
+                    <img src="xtreme 250r red.png" alt="Xtreme 250R">
+                    <h3>Xtreme 250R</h3>
+                    <p>Quarter-litre performance for sharp street rides.</p>
+                    <a href="xtreme 250r.html">View Model</a>
+                </article>
+            </div>
+        </section>
 
-.ex-showroom {
-    color: #aaa;
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
+        <section class="catalog-section is-soft" id="motorcycles">
+            <div class="section-head compact">
+                <p class="subpage-eyebrow">Motorcycles</p>
+                <h2>Daily Commute To Street Sport</h2>
+            </div>
+            <div class="catalog-grid">
+                <article class="catalog-card">
+                    <img src="splendor black red.png" alt="Splendor Plus">
+                    <h3>Splendor+</h3>
+                    <p>Trusted commuter for everyday reliability.</p>
+                    <a href="splendor+.html">View Model</a>
+                </article>
+                <article class="catalog-card">
+                    <img src="xtech tornado grey.png" alt="Splendor Plus XTEC">
+                    <h3>Splendor+ XTEC</h3>
+                    <p>Connected features with the Splendor DNA.</p>
+                    <a href="splendor+ xtech.html">View Model</a>
+                </article>
+                <article class="catalog-card">
+                    <img src="hf red black.png" alt="HF Deluxe">
+                    <h3>HF Deluxe</h3>
+                    <p>Efficient, simple and built for daily use.</p>
+                    <a href="hf deleux.html">View Model</a>
+                </article>
+                <article class="catalog-card">
+                    <img src="passion black red.png" alt="Passion Plus">
+                    <h3>Passion+</h3>
+                    <p>Practical commute with a stronger style line.</p>
+                    <a href="passion.html">View Model</a>
+                </article>
+                <article class="catalog-card">
+                    <img src="glamour black silver.png" alt="Glamour">
+                    <h3>Glamour</h3>
+                    <p>125cc confidence for city and highway stretches.</p>
+                    <a href="glamour.html">View Model</a>
+                </article>
+                <article class="catalog-card">
+                    <img src="super black.png" alt="Super Splendor">
+                    <h3>Super Splendor</h3>
+                    <p>More torque and comfort for daily distance.</p>
+                    <a href="super splendor.html">View Model</a>
+                </article>
+                <article class="catalog-card">
+                    <img src="xtreme 125r black.jpeg" alt="Xtreme 125R">
+                    <h3>Xtreme 125R</h3>
+                    <p>Sporty 125cc styling with agile handling.</p>
+                    <a href="xtreme 125r.html">View Model</a>
+                </article>
+                <article class="catalog-card">
+                    <img src="xtreme 1604v green.jpeg" alt="Xtreme 160 4V">
+                    <h3>Xtreme 160 4V</h3>
+                    <p>Responsive street performance with 4V power.</p>
+                    <a href="xtreme 160 4v.html">View Model</a>
+                </article>
+            </div>
+        </section>
 
-/* Hero Section & Color Switcher */
-.hero-display {
-    min-height: 85vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(to bottom, rgba(231, 223, 223, 0.7), #000); /* Fades into black for readability below */
-    padding: 40px 0;
-}
+        <section class="catalog-section" id="scooters">
+            <div class="section-head compact">
+                <p class="subpage-eyebrow">Scooters</p>
+                <h2>City Comfort And Family Convenience</h2>
+            </div>
+            <div class="catalog-grid">
+                <article class="catalog-card">
+                    <img src="xoom 110 vx yellow.png" alt="Xoom 110">
+                    <h3>Xoom 110</h3>
+                    <p>Sporty city scooter with youthful styling.</p>
+                    <a href="xoom 110.html">View Model</a>
+                </article>
+                <article class="catalog-card">
+                    <img src="xoom 125 blue.png" alt="Xoom 125">
+                    <h3>Xoom 125</h3>
+                    <p>Extra punch for fast-moving urban days.</p>
+                    <a href="xoom 125.html">View Model</a>
+                </article>
+                <article class="catalog-card">
+                    <img src="xoom 160 zx green.png" alt="Xoom 160">
+                    <h3>Xoom 160</h3>
+                    <p>Maxi-scooter attitude with premium practicality.</p>
+                    <a href="xoom160.html">View Model</a>
+                </article>
+                <article class="catalog-card">
+                    <img src="destini zx blue.png" alt="Destini 125">
+                    <h3>Destini 125</h3>
+                    <p>Comfort-focused family scooter with metal body appeal.</p>
+                    <a href="destini 125 .html">View Model</a>
+                </article>
+                <article class="catalog-card">
+                    <img src="destini 110 vx white.png" alt="Destini 110">
+                    <h3>Destini 110</h3>
+                    <p>Easy everyday comfort for quick local rides.</p>
+                    <a href="destini 110.html">View Model</a>
+                </article>
+                <article class="catalog-card">
+                    <img src="pleasure vx blue.png" alt="Pleasure Plus">
+                    <h3>Pleasure+</h3>
+                    <p>Lightweight convenience with bright city style.</p>
+                    <a href="pleasure 100.html">View Model</a>
+                </article>
+            </div>
+        </section>
 
-.color-preview-container {
-    text-align: center;
-    width: 100%;
-    max-width: 1000px;
-}
+        <section class="split-band" id="electric">
+            <div>
+                <p class="subpage-eyebrow">Electric</p>
+                <h2>VIDA V1 For Connected Electric Mobility</h2>
+                <p>Book a showroom visit to explore VIDA variants, charging support and ownership options with the Nehan Hero team.</p>
+                <a href="vida v1.html" class="btn btn-primary">Explore VIDA</a>
+            </div>
+            <img src="vida blue v2.svg" alt="VIDA V1 electric scooter">
+        </section>
 
-#bike-render {
-    max-width: 80%;
-    height: auto;
-    transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-    filter: drop-shadow(0 20px 40px rgba(0,0,0,0.8));
-    margin-bottom: 20px;
-}
+        <section class="cta-panel">
+            <h2>Need Help Choosing?</h2>
+            <p>Tell us your daily route, budget and preferred style. The showroom team can help shortlist the right Hero model.</p>
+            <div class="hero-cta-row center">
+                <a href="contact.html" class="btn btn-primary">Contact Us</a>
+                <a href="booking.html" class="btn btn-ghost">Book Visit</a>
+            </div>
+        </section>
+    </main>
 
-.color-selector h3 { color: #fff; letter-spacing: 3px; font-size: 1rem; opacity: 0.8;}
-.options { display: flex; justify-content: center; gap: 20px; margin: 15px 0; }
-.dot { width: 35px; height: 35px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: 0.3s; box-shadow: 0 4px 10px rgba(0,0,0,0.5);}
-.dot.active { border-color: #fff; transform: scale(1.2); box-shadow: 0 0 15px rgba(237, 28, 36, 0.6); }
-#color-name { margin-bottom: 30px; font-weight: bold; color: #ccc; }
+    <footer class="site-footer" id="footer-links">
+        <div class="footer-grid">
+            <div>
+                <h4>Nehan Hero</h4>
+                <p>Loharu, Bhiwani, Haryana - 127201</p>
+            </div>
+            <div>
+                <h4>Explore</h4>
+                <a href="explore.html">All Vehicles</a>
+                <a href="service.html">Service And Care</a>
+                <a href="booking.html">Book Online</a>
+            </div>
+            <div>
+                <h4>Account</h4>
+                <a href="account.html">My Account</a>
+                <a href="account.html">Bookings</a>
+                <a href="contact.html">Support</a>
+            </div>
+            <div>
+                <h4>Contact</h4>
+                <p>Phone: +91 7015139162</p>
+                <p>Email: info@heromotocorp.com</p>
+            </div>
+        </div>
+        <p class="footer-note">&copy; 2026 Nehan Hero Loharu. All rights reserved.</p>
+    </footer>
 
-/* Buy Now Button */
-.btn-buy-large {
-    display: inline-block;
-    background: #ed1c24;
-    color: #fff;
-    padding: 15px 50px;
-    font-size: 1.2rem;
-    font-weight: 900;
-    text-decoration: none;
-    transition: 0.3s;
-    border-radius: 4px;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-}
-.btn-buy-large:hover { background: #fff; color: #ed1c24; transform: translateY(-3px); box-shadow: 0 10px 20px rgba(237, 28, 36, 0.3); }
-
-/* Info Sections (Specs & Tech) */
-.info-section { padding: 80px 8%; background: #6d6a6a; } /* Solid black background for content */
-.section-title h2 { font-size: 2.5rem; font-weight: 900; margin-bottom: 40px; border-bottom: 1px solid #333; padding-bottom: 10px;}
-.section-title span { color: #ed1c24; }
-
-.grid { display: grid; gap: 30px; }
-.specs-grid { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
-.tech-grid { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
-
-.feature-card { background: #141414; padding: 30px; border-left: 4px solid #ed1c24; transition: 0.3s;}
-.feature-card:hover { background: #1a1a1a; transform: translateY(-5px); }
-.feature-card h3 { color: #fff; font-size: 2.2rem; margin: 10px 0; }
-.feature-card h4 { color: #ed1c24; font-size: 1.1rem; text-transform: uppercase; }
-.feature-card p { color: #aaa; font-size: 0.9rem; line-height: 1.5; }
-.feature-card .icon { font-size: 2rem; margin-bottom: 15px; }
+    <script src="cloud-config.js"></script>
+    <script src="cloud-sync.js"></script>
+    <script src="auth-system.js"></script>
+    <script src="home-hero.js"></script>
+</body>
+</html>
