@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     const user = auth.getCurrentUser();
+    document.getElementById('accountLogoutButton')?.removeAttribute('hidden');
 
     displayUserInfo(user);
     initializeAccountTabs();

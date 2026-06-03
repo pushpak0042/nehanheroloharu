@@ -1,6 +1,7 @@
 // Authentication System
 class AuthSystem {
     constructor() {
+        this.usersKey = 'registeredUsers';
         this.currentUser = this.loadUserFromStorage();
     }
 
@@ -21,8 +22,31 @@ class AuthSystem {
         this.currentUser = user;
     }
 
+    normalizeEmail(email) {
+        return String(email || '').trim().toLowerCase();
+    }
+
+    loadRegisteredUsers() {
+        try {
+            const users = localStorage.getItem(this.usersKey);
+            return users ? JSON.parse(users) : [];
+        } catch (error) {
+            console.warn('Unable to load registered users.', error);
+            return [];
+        }
+    }
+
+    saveRegisteredUsers(users) {
+        localStorage.setItem(this.usersKey, JSON.stringify(users));
+    }
+
+    findRegisteredUser(email) {
+        const normalizedEmail = this.normalizeEmail(email);
+        return this.loadRegisteredUsers().find((user) => user.email === normalizedEmail) || null;
+    }
+
     createUserId(email) {
-        const normalizedEmail = String(email || '').trim().toLowerCase();
+        const normalizedEmail = this.normalizeEmail(email);
         let hash = 0;
 
         for (let i = 0; i < normalizedEmail.length; i += 1) {
@@ -33,15 +57,13 @@ class AuthSystem {
         return 'USR' + Math.abs(hash || Date.now());
     }
 
-    buildUser(email, name) {
-        const normalizedEmail = String(email || '').trim().toLowerCase();
-        const existingUser = this.currentUser && this.currentUser.email === normalizedEmail ? this.currentUser : {};
+    buildUser(email, name, id) {
+        const normalizedEmail = this.normalizeEmail(email);
 
         return {
-            ...existingUser,
-            id: existingUser.id || this.createUserId(normalizedEmail),
+            id: id || this.createUserId(normalizedEmail),
             email: normalizedEmail,
-            name: name || existingUser.name || normalizedEmail.split('@')[0] || 'User',
+            name: name || normalizedEmail.split('@')[0] || 'User',
             loginTime: new Date().toISOString()
         };
     }
@@ -65,11 +87,32 @@ class AuthSystem {
     }
 
     // Login user
-    login(email, password, name) {
-        const user = this.buildUser(email, name);
+    login(email, password) {
+        const normalizedEmail = this.normalizeEmail(email);
+        const savedUser = this.findRegisteredUser(normalizedEmail);
+
+        if (!savedUser) {
+            return {
+                success: false,
+                message: 'No user found. Please sign up first.'
+            };
+        }
+
+        if (savedUser.password !== String(password || '')) {
+            return {
+                success: false,
+                message: 'Incorrect password. Please try again.'
+            };
+        }
+
+        const user = this.buildUser(savedUser.email, savedUser.name, savedUser.id);
         this.saveUserToStorage(user);
         this.syncUserToCloud(user, 'login');
-        return user;
+
+        return {
+            success: true,
+            user
+        };
     }
 
     // Logout user
@@ -78,12 +121,46 @@ class AuthSystem {
         this.currentUser = null;
     }
 
-    // Register user (same as login for this basic system)
+    // Register user
     register(email, password, name) {
-        const user = this.buildUser(email, name);
+        const normalizedEmail = this.normalizeEmail(email);
+        const cleanName = String(name || '').trim();
+        const cleanPassword = String(password || '');
+
+        if (!normalizedEmail || !cleanPassword || !cleanName) {
+            return {
+                success: false,
+                message: 'Please enter your name, email and password.'
+            };
+        }
+
+        if (this.findRegisteredUser(normalizedEmail)) {
+            return {
+                success: false,
+                message: 'Account already exists. Please login.'
+            };
+        }
+
+        const users = this.loadRegisteredUsers();
+        const savedUser = {
+            id: this.createUserId(normalizedEmail),
+            email: normalizedEmail,
+            name: cleanName,
+            password: cleanPassword,
+            createdAt: new Date().toISOString()
+        };
+
+        users.push(savedUser);
+        this.saveRegisteredUsers(users);
+
+        const user = this.buildUser(savedUser.email, savedUser.name, savedUser.id);
         this.saveUserToStorage(user);
         this.syncUserToCloud(user, 'register');
-        return user;
+
+        return {
+            success: true,
+            user
+        };
     }
 }
 
@@ -118,12 +195,12 @@ function createLoginModal() {
     modal.innerHTML = `
         <div class="login-modal-content">
             <div class="login-modal-header">
-                <h2>Sign In / Register</h2>
+                <h2>Login / Sign Up</h2>
                 <button class="close-btn" onclick="hideLoginModal()">&times;</button>
             </div>
             
             <div class="login-tabs">
-                <button class="tab-btn active" data-tab="login">Sign In</button>
+                <button class="tab-btn active" data-tab="login">Login</button>
                 <button class="tab-btn" data-tab="register">Sign Up</button>
             </div>
 
@@ -137,7 +214,7 @@ function createLoginModal() {
                     <label for="loginPassword">Password</label>
                     <input type="password" id="loginPassword" placeholder="Enter your password" required>
                 </div>
-                <button type="submit" class="auth-btn">Sign In</button>
+                <button type="submit" class="auth-btn">Login</button>
             </form>
 
             <!-- Register Form -->
@@ -154,7 +231,7 @@ function createLoginModal() {
                     <label for="registerPassword">Password</label>
                     <input type="password" id="registerPassword" placeholder="Create a password" required>
                 </div>
-                <button type="submit" class="auth-btn">Create Account</button>
+                <button type="submit" class="auth-btn">Sign Up</button>
             </form>
 
             <div class="login-message"></div>
@@ -183,9 +260,13 @@ function createLoginModal() {
         e.preventDefault();
         const email = document.getElementById('loginEmail').value;
         const password = document.getElementById('loginPassword').value;
-        const name = email.split('@')[0];
 
-        auth.login(email, password, name);
+        const result = auth.login(email, password);
+        if (!result.success) {
+            showLoginMessage(result.message, 'error');
+            return;
+        }
+
         showLoginMessage('Successfully logged in!', 'success');
         
         setTimeout(completeAuthFlow, 1500);
@@ -198,8 +279,13 @@ function createLoginModal() {
         const email = document.getElementById('registerEmail').value;
         const password = document.getElementById('registerPassword').value;
 
-        auth.register(email, password, name);
-        showLoginMessage('Account created successfully!', 'success');
+        const result = auth.register(email, password, name);
+        if (!result.success) {
+            showLoginMessage(result.message, 'error');
+            return;
+        }
+
+        showLoginMessage('Account created successfully. You are logged in.', 'success');
         
         setTimeout(completeAuthFlow, 1500);
     });
@@ -284,6 +370,13 @@ function updateAccountButton() {
                 `;
                 accountBtn.parentElement.appendChild(dropdown);
             });
+        } else {
+            accountBtn.textContent = 'Login';
+            accountBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                localStorage.setItem('redirectAfterLogin', 'account.html');
+                showLoginModal();
+            });
         }
     }
 }
@@ -291,5 +384,6 @@ function updateAccountButton() {
 // Logout user
 function logoutUser() {
     auth.logout();
-    location.reload();
+    localStorage.removeItem('redirectAfterLogin');
+    window.location.href = 'index.html';
 }
