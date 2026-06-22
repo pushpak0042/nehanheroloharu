@@ -323,8 +323,15 @@ function initializeSupportRequests(user) {
 
     renderSupportRequests(user);
 
-    supportForm.onsubmit = (event) => {
+    supportForm.onsubmit = async (event) => {
         event.preventDefault();
+
+        const submitBtn = supportForm.querySelector('button[type="submit"]') || supportForm.querySelector('.btn-primary');
+        const originalBtnText = submitBtn ? submitBtn.textContent : 'Submit';
+        if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Sending...';
+        }
 
         const request = {
             id: 'TKT' + Date.now(),
@@ -337,6 +344,25 @@ function initializeSupportRequests(user) {
             response: null
         };
 
+        try {
+            await fetch('https://api.web3forms.com/submit', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    access_key: '73b01297-d8b0-4b61-abc1-08f32e9e8cfa',
+                    subject: 'New Support Request: ' + request.subject,
+                    name: user.name || 'User',
+                    email: user.email || 'N/A',
+                    message: `Category: ${request.category}\nSubject: ${request.subject}\nMessage:\n${request.message}`
+                })
+            });
+        } catch (error) {
+            console.warn('Web3Forms email sending failed.', error);
+        }
+
         const requests = readJson('supportRequests', []);
         requests.unshift(request);
         writeJson('supportRequests', requests);
@@ -344,6 +370,11 @@ function initializeSupportRequests(user) {
         showNotification('Support request submitted. Ticket ID: ' + request.id, 'success');
         supportForm.reset();
         renderSupportRequests(user);
+
+        if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.textContent = originalBtnText;
+        }
     };
 }
 
