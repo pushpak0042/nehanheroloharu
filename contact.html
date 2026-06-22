@@ -190,12 +190,19 @@
 
             if (!form) return;
 
-            form.addEventListener("submit", function (event) {
+            form.addEventListener("submit", async function (event) {
                 event.preventDefault();
 
                 if (!form.checkValidity()) {
                     form.reportValidity();
                     return;
+                }
+
+                var submitBtn = form.querySelector('.form-submit');
+                var originalBtnText = submitBtn ? submitBtn.textContent : 'Submit Request';
+                if (submitBtn) {
+                    submitBtn.disabled = true;
+                    submitBtn.textContent = 'Sending...';
                 }
 
                 var request = {
@@ -212,12 +219,36 @@
                     response: null
                 };
 
+                try {
+                    await fetch('https://api.web3forms.com/submit', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            access_key: '73b01297-d8b0-4b61-abc1-08f32e9e8cfa',
+                            subject: 'New Contact Request: ' + request.category,
+                            name: request.name,
+                            email: request.email,
+                            phone: request.phone,
+                            message: `Topic: ${request.category}\n\nMessage:\n${request.message}`
+                        })
+                    });
+                } catch (error) {
+                    console.warn('Web3Forms email sending failed.', error);
+                }
+
                 var requests = JSON.parse(localStorage.getItem("supportRequests") || "[]");
                 requests.unshift(request);
                 localStorage.setItem("supportRequests", JSON.stringify(requests));
 
-                status.textContent = "Request submitted. Ticket ID: " + request.id;
+                status.textContent = "Request submitted. We will contact you soon. Ticket ID: " + request.id;
                 form.reset();
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = originalBtnText;
+                }
             });
         });
     </script>

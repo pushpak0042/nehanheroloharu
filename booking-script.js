@@ -310,6 +310,26 @@ function buildBooking(bookingDate, bookingSlot) {
 }
 
 async function saveBooking(booking) {
+    try {
+        await fetch('https://api.web3forms.com/submit', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+                access_key: '73b01297-d8b0-4b61-abc1-08f32e9e8cfa',
+                subject: 'New ' + (booking.type === 'service' ? 'Service' : 'Vehicle') + ' Booking: ' + booking.service,
+                name: booking.clientName,
+                email: booking.clientEmail,
+                phone: booking.clientMobile,
+                message: `Booking Details:\nID: ${booking.id}\nService: ${booking.service}\nVariant: ${booking.variant || 'N/A'}\nColor: ${booking.color || 'N/A'}\nDate: ${booking.bookingDate}\nSlot: ${booking.bookingSlot}\n\nClient Details:\nName: ${booking.clientName}\nMobile: ${booking.clientMobile}\nEmail: ${booking.clientEmail}\nAddress: ${booking.clientAddress}\nCity: ${booking.clientCity}\nPIN: ${booking.clientPinCode}`
+            })
+        });
+    } catch (error) {
+        console.warn('Web3Forms email sending failed.', error);
+    }
+
     if (window.heroBookingStorage) {
         return window.heroBookingStorage.saveBooking(booking);
     }
